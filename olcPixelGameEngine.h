@@ -1729,7 +1729,7 @@ namespace olc
 			c = olc::WHITE;
 			break;
 		default:
-			c = olc::BLACK;
+			c = olc::WHITE;
 		}
 
 		return c;
