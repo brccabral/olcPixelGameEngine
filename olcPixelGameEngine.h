@@ -822,6 +822,8 @@ namespace olc
 		Mode modeSample = Mode::NORMAL;
 
 		static std::unique_ptr<olc::ImageLoader> loader;
+		
+		static Pixel GetColour(float lum);
 	};
 
 	// O------------------------------------------------------------------------------O
@@ -1668,6 +1670,71 @@ namespace olc
 
 	Pixel* Sprite::GetData()
 	{ return pColData.data(); }
+
+	Pixel Sprite::GetColour(float lum)
+	{
+		Pixel c = olc::BLACK;
+		int pixel_bw = (int)(13.0f * lum);
+		switch (pixel_bw)
+		{
+		case 0:
+			c = olc::BLACK;
+			break;
+
+		case 1:
+			c = olc::DARK_GREY;
+			c.a = 255 * 0.25f;
+			break;
+		case 2:
+			c = olc::DARK_GREY;
+			c.a = 255 * 0.5f;
+			break;
+		case 3:
+			c = olc::DARK_GREY;
+			c.a = 255 * 0.75f;
+			break;
+		case 4:
+			c = olc::DARK_GREY;
+			break;
+
+		case 5:
+			c = olc::GREY;
+			c.a = 255 * 0.25f;
+			break;
+		case 6:
+			c = olc::GREY;
+			c.a = 255 * 0.5f;
+			break;
+		case 7:
+			c = olc::GREY;
+			c.a = 255 * 0.75f;
+			break;
+		case 8:
+			c = olc::GREY;
+			break;
+
+		case 9:
+			c = olc::WHITE;
+			c.a = 255 * 0.25f;
+			break;
+		case 10:
+			c = olc::WHITE;
+			c.a = 255 * 0.5f;
+			break;
+		case 11:
+			c = olc::WHITE;
+			c.a = 255 * 0.75f;
+			break;
+		case 12:
+			c = olc::WHITE;
+			break;
+		default:
+			c = olc::BLACK;
+		}
+
+		return c;
+	}
+
 
 
 	olc::rcode Sprite::LoadFromFile(const std::string& sImageFile, olc::ResourcePack* pack)
