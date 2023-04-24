@@ -70,6 +70,8 @@
 #ifndef OLC_PGEX_GFX2D
 #define OLC_PGEX_GFX2D
 
+#include "olcPixelGameEngine.h"
+
 #include <algorithm>
 #undef min
 #undef max

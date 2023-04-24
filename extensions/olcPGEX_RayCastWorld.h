@@ -75,6 +75,8 @@
 #ifndef OLC_PGEX_RAYCASTWORLD_H
 #define OLC_PGEX_RAYCASTWORLD_H
 
+#include "olcPixelGameEngine.h"
+
 #include <unordered_map>
 #include <algorithm>
 

@@ -71,6 +71,8 @@
 #ifndef OLC_PGEX_SOUND_H
 #define OLC_PGEX_SOUND_H
 
+#include "olcPixelGameEngine.h"
+
 #include <istream>
 #include <cstring>
 #include <climits>
