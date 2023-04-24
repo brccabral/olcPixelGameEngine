@@ -1579,7 +1579,13 @@ namespace olc
 	{ width = 0; height = 0; }
 
 	Sprite::Sprite(const std::string& sImageFile, olc::ResourcePack* pack)
-	{ LoadFromFile(sImageFile, pack); }
+	{ 
+		if(LoadFromFile(sImageFile, pack) != olc::rcode::OK)
+		{
+			std::cout << "Could not load " << sImageFile << std::endl;
+			throw 1;
+		}
+	}
 
 	Sprite::Sprite(int32_t w, int32_t h)
 	{		
