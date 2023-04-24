@@ -48,7 +48,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2019, 2020, 2021, 2022
+	David Barr, aka javidx9, ï¿½OneLoneCoder 2019, 2020, 2021, 2022
 
 */
 
@@ -62,18 +62,18 @@ namespace olc::utils
 	{
 	public:
 		enum class Mode : uint8_t
-		{			
-			Simple,			// No motion, just directly settable			
-			EdgeMove,		// Moves as target crosses boundary			
-			LazyFollow,		// Lazily follows the target			
-			FixedScreens,	// Moves statically between "screens"
+		{
+			Simple,		  // No motion, just directly settable
+			EdgeMove,	  // Moves as target crosses boundary
+			LazyFollow,	  // Lazily follows the target
+			FixedScreens, // Moves statically between "screens"
 		};
 
 	public:
 		inline Camera2D() : m_pTarget(&m_vLocalTarget) {}
-		
+
 		// Construct a camera with a viewable area size, and an optional starting position
-		inline Camera2D(const olc::vf2d& vViewSize, const olc::vf2d& vViewPos = { 0.0f, 0.0f }) : m_pTarget(&m_vLocalTarget)
+		inline Camera2D(const olc::vf2d &vViewSize, const olc::vf2d &vViewPos = {0.0f, 0.0f}) : m_pTarget(&m_vLocalTarget)
 		{
 			m_vViewSize = vViewSize;
 			m_vViewPos = vViewPos;
@@ -92,44 +92,44 @@ namespace olc::utils
 		}
 
 		// Get the position of the target being tracked by this camera
-		inline const olc::vf2d& GetTarget() const
+		inline const olc::vf2d &GetTarget() const
 		{
 			return *m_pTarget;
 		}
 
 		// Get the position of the cameras focus point
-		inline const olc::vf2d& GetPosition() const
+		inline const olc::vf2d &GetPosition() const
 		{
 			return m_vPosition;
 		}
 
 		// Get the top left of teh cameras visible area in world space
-		inline const olc::vf2d& GetViewPosition() const
+		inline const olc::vf2d &GetViewPosition() const
 		{
 			return m_vViewPos;
 		}
 
 		// Get the camera's visible area
-		inline const olc::vf2d& GetViewSize() const
+		inline const olc::vf2d &GetViewSize() const
 		{
 			return m_vViewSize;
 		}
 
 		// Set tracked point via pointer
-		inline void SetTarget(olc::vf2d& vTarget)
+		inline void SetTarget(olc::vf2d &vTarget)
 		{
 			m_pTarget = &vTarget;
 		}
 
 		// Set tracked point via const ref - {10, 35} for example
-		inline void SetTarget(const olc::vf2d&& vTarget)
+		inline void SetTarget(const olc::vf2d &&vTarget)
 		{
 			m_vLocalTarget = vTarget;
 			m_pTarget = &m_vLocalTarget;
 		}
 
 		// Set world boundary rectangle
-		inline void SetWorldBoundary(const olc::vf2d& vPos, const olc::vf2d& vSize)
+		inline void SetWorldBoundary(const olc::vf2d &vPos, const olc::vf2d &vSize)
 		{
 			m_vWorldBoundaryPos = vPos;
 			m_vWorldBoundarySize = vSize;
@@ -148,13 +148,13 @@ namespace olc::utils
 		}
 
 		// Get the world boundary rectangle position
-		inline const olc::vf2d& GetWorldBoundaryPosition() const
+		inline const olc::vf2d &GetWorldBoundaryPosition() const
 		{
 			return m_vWorldBoundaryPos;
 		}
 
 		// Get the world boundary rectangle size
-		inline const olc::vf2d& GetWorldBoundarySize() const
+		inline const olc::vf2d &GetWorldBoundarySize() const
 		{
 			return m_vWorldBoundarySize;
 		}
@@ -172,13 +172,13 @@ namespace olc::utils
 		}
 
 		// Set distance from tracked point to start nudging screen
-		inline void SetEdgeTriggerDistance(const olc::vf2d& vEdge)
+		inline void SetEdgeTriggerDistance(const olc::vf2d &vEdge)
 		{
 			m_vEdgeTriggerDistance = vEdge;
 		}
 
 		// Return disance from tracked point that screen will nudge
-		inline const olc::vf2d& GetEdgeTriggerDistance() const
+		inline const olc::vf2d &GetEdgeTriggerDistance() const
 		{
 			return m_vEdgeTriggerDistance;
 		}
@@ -189,33 +189,37 @@ namespace olc::utils
 		{
 			switch (m_nMode)
 			{
-				case Mode::Simple:
-				{
-					m_vPosition = GetTarget();
-				}
-				break;
+			case Mode::Simple:
+			{
+				m_vPosition = GetTarget();
+			}
+			break;
 
-				case Mode::EdgeMove:
-				{
-					olc::vf2d vOverlap = GetTarget() - m_vPosition;
-					if (vOverlap.x > m_vEdgeTriggerDistance.x) m_vPosition.x += vOverlap.x - m_vEdgeTriggerDistance.x;
-					if (vOverlap.x < -m_vEdgeTriggerDistance.x) m_vPosition.x += vOverlap.x + m_vEdgeTriggerDistance.x;
-					if (vOverlap.y > m_vEdgeTriggerDistance.y) m_vPosition.y += vOverlap.y - m_vEdgeTriggerDistance.y;
-					if (vOverlap.y < -m_vEdgeTriggerDistance.y) m_vPosition.y += vOverlap.y + m_vEdgeTriggerDistance.y;
-				}
-				break;
+			case Mode::EdgeMove:
+			{
+				olc::vf2d vOverlap = GetTarget() - m_vPosition;
+				if (vOverlap.x > m_vEdgeTriggerDistance.x)
+					m_vPosition.x += vOverlap.x - m_vEdgeTriggerDistance.x;
+				if (vOverlap.x < -m_vEdgeTriggerDistance.x)
+					m_vPosition.x += vOverlap.x + m_vEdgeTriggerDistance.x;
+				if (vOverlap.y > m_vEdgeTriggerDistance.y)
+					m_vPosition.y += vOverlap.y - m_vEdgeTriggerDistance.y;
+				if (vOverlap.y < -m_vEdgeTriggerDistance.y)
+					m_vPosition.y += vOverlap.y + m_vEdgeTriggerDistance.y;
+			}
+			break;
 
-				case Mode::LazyFollow:
-				{
-					m_vPosition += (GetTarget() - m_vPosition) * m_fLazyFollowRate * fElapsedTime;
-				}
-				break;
+			case Mode::LazyFollow:
+			{
+				m_vPosition += (GetTarget() - m_vPosition) * m_fLazyFollowRate * fElapsedTime;
+			}
+			break;
 
-				case Mode::FixedScreens:
-				{
-					m_vPosition = olc::vf2d(olc::vi2d(GetTarget() / m_vScreenSize) * olc::vi2d(m_vScreenSize)) + (m_vViewSize * 0.5f);
-				}
-				break;
+			case Mode::FixedScreens:
+			{
+				m_vPosition = olc::vf2d(olc::vi2d(GetTarget() / m_vScreenSize) * olc::vi2d(m_vScreenSize)) + (m_vViewSize * 0.5f);
+			}
+			break;
 			}
 
 			// Make camera target the middle of the view
@@ -228,7 +232,7 @@ namespace olc::utils
 			}
 
 			return GetTarget().x >= m_vViewPos.x && GetTarget().x < (m_vViewPos.x + m_vViewSize.x) &&
-				GetTarget().y >= m_vViewPos.y && GetTarget().y < (m_vViewPos.y + m_vViewSize.y);
+				   GetTarget().y >= m_vViewPos.y && GetTarget().y < (m_vViewPos.y + m_vViewSize.y);
 		}
 
 	protected:
@@ -242,17 +246,17 @@ namespace olc::utils
 		Mode m_nMode = Mode::Simple;
 
 		// Target Vector2D object camera should follow (either ref or ptr)
-		olc::vf2d* m_pTarget = nullptr;
+		olc::vf2d *m_pTarget = nullptr;
 		olc::vf2d m_vLocalTarget;
 
 		// World Boundary
 		bool m_bWorldBoundary = false;
-		olc::vf2d m_vWorldBoundaryPos = { 0.0f, 0.0f };
-		olc::vf2d m_vWorldBoundarySize = { 256.0f, 240.0f };
+		olc::vf2d m_vWorldBoundaryPos = {0.0f, 0.0f};
+		olc::vf2d m_vWorldBoundarySize = {256.0f, 240.0f};
 
 		// Mode specific
-		olc::vf2d m_vEdgeTriggerDistance = { 1.0f, 1.0f };
+		olc::vf2d m_vEdgeTriggerDistance = {1.0f, 1.0f};
 		float m_fLazyFollowRate = 4.0f;
-		olc::vi2d m_vScreenSize = { 16,15 };
+		olc::vi2d m_vScreenSize = {16, 15};
 	};
 }

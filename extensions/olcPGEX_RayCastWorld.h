@@ -13,7 +13,7 @@
 	This is an extension to the olcPixelGameEngine, which provides
 	a quick and easy to use, flexible, skinnable, ray-cast 3D world
 	engine, which handles all graphics and collisions within a
-	pseudo 3D world. 
+	pseudo 3D world.
 
 	It is designed to be implementation independent. Please see example
 	files for usage instructions.
@@ -64,7 +64,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2019, 2020
+	David Barr, aka javidx9, ï¿½OneLoneCoder 2019, 2020
 
 	Revisions:
 	1.00:	Initial Release
@@ -83,7 +83,7 @@ namespace olc
 	namespace rcw
 	{
 		// Base class for objects that exist in world
-		class Object 
+		class Object
 		{
 		public:
 			// Linkage to user object description
@@ -154,18 +154,16 @@ namespace olc
 
 			// ABSTRACT - User must return suitable olc::Pixel for object sprite sample location
 			virtual olc::Pixel SelectObjectPixel(const uint32_t id, const float sample_x, const float sample_y, const float distance, const float angle) = 0;
-	
+
 			// OPTIONAL - User can handle collsiion response with scenery should they choose to
 			virtual void HandleObjectVsScenery(std::shared_ptr<olc::rcw::Object> object, const int tile_x, const int tile_y, const olc::rcw::Engine::CellSide side, const float offset_x, const float offset_y);
 
 			// OPTIONAL - User can handle collsiion response with objects should they choose to
 			virtual void HandleObjectVsObject(std::shared_ptr<olc::rcw::Object> object1, std::shared_ptr<olc::rcw::Object> object2);
 
-
-
 		public:
 			// Sets In-Game Camera position
-			void SetCamera(const olc::vf2d& pos, const float heading);
+			void SetCamera(const olc::vf2d &pos, const float heading);
 
 			// Called to update world state
 			virtual void Update(float fElapsedTime);
@@ -181,16 +179,16 @@ namespace olc
 			// has hit a specific tile
 			struct sTileHit
 			{
-				olc::vi2d vTilePos = { 0,0 };
-				olc::vf2d vHitPos = { 0,0 };
+				olc::vi2d vTilePos = {0, 0};
+				olc::vf2d vHitPos = {0, 0};
 				float fLength = 0.0f;
 				float fSampleX = 0.0f;
 				Engine::CellSide eSide = Engine::CellSide::North;
 			};
 
 			// Cast ray into tile world, and return info about what it hits (if anything)
-			bool CastRayDDA(const olc::vf2d& vOrigin, const olc::vf2d& vDirection, sTileHit& hit);
-			
+			bool CastRayDDA(const olc::vf2d &vOrigin, const olc::vf2d &vDirection, sTileHit &hit);
+
 			// Convenient constants in algorithms
 			const olc::vi2d vScreenSize;
 			const olc::vi2d vHalfScreenSize;
@@ -201,12 +199,11 @@ namespace olc
 			std::unique_ptr<float[]> pDepthBuffer;
 
 			// Local store of camera position and direction
-			olc::vf2d vCameraPos = { 5.0f, 5.0f };
+			olc::vf2d vCameraPos = {5.0f, 5.0f};
 			float fCameraHeading = 0.0f;
-		};		
+		};
 	}
 }
-
 
 #ifdef OLC_PGEX_RAYCASTWORLD
 #undef OLC_PGEX_RAYCASTWORLD
@@ -231,48 +228,47 @@ void olc::rcw::Object::Turn(const float fTurnSpeed)
 	fHeading += fTurnSpeed;
 
 	// Wrap heading to sensible angle
-	if (fHeading < -3.14159f) fHeading += 2.0f * 3.14159f;
-	if (fHeading > 3.14159f) fHeading -= 2.0f * 3.14159f;
+	if (fHeading < -3.14159f)
+		fHeading += 2.0f * 3.14159f;
+	if (fHeading > 3.14159f)
+		fHeading -= 2.0f * 3.14159f;
 }
-
 
 void olc::rcw::Object::Stop()
 {
 	fSpeed = 0;
-	vel = { 0,0 };
+	vel = {0, 0};
 }
 
-olc::rcw::Engine::Engine(const int screen_w, const int screen_h, const float fov) :
-	vScreenSize(screen_w, screen_h),
-	vHalfScreenSize(screen_w / 2, screen_h / 2),
-	vFloatScreenSize(float(screen_w), float(screen_h))
+olc::rcw::Engine::Engine(const int screen_w, const int screen_h, const float fov) : vScreenSize(screen_w, screen_h),
+																					vHalfScreenSize(screen_w / 2, screen_h / 2),
+																					vFloatScreenSize(float(screen_w), float(screen_h))
 {
 	fFieldOfView = fov;
 	pDepthBuffer.reset(new float[vScreenSize.x * vScreenSize.y]);
 }
 
-
-void olc::rcw::Engine::SetCamera(const olc::vf2d& pos, const float heading)
+void olc::rcw::Engine::SetCamera(const olc::vf2d &pos, const float heading)
 {
 	vCameraPos = pos;
 	fCameraHeading = heading;
 }
 
-
 void olc::rcw::Engine::Update(float fElapsedTime)
 {
 	// Update the position and statically resolve for collisions against the map
-	for (auto& ob : mapObjects)
+	for (auto &ob : mapObjects)
 	{
 		std::shared_ptr<olc::rcw::Object> object = ob.second;
-		if (!object->bIsActive) continue;
+		if (!object->bIsActive)
+			continue;
 
 		int nSteps = 1;
 		float fDelta = fElapsedTime;
 		float fTotalTravel = (object->vel * fElapsedTime).mag2();
 		float fTotalRadius = (object->fRadius * object->fRadius);
 
-		if(fTotalTravel >= fTotalRadius)
+		if (fTotalTravel >= fTotalRadius)
 		{
 			float fSteps = std::ceil(fTotalTravel / fTotalRadius);
 			nSteps = int(fSteps);
@@ -288,15 +284,17 @@ void olc::rcw::Engine::Update(float fElapsedTime)
 			if (object->bCollideWithObjects)
 			{
 				// Iterate through all other objects (this can be costly)
-				for (auto& ob2 : mapObjects)
+				for (auto &ob2 : mapObjects)
 				{
 					std::shared_ptr<olc::rcw::Object> target = ob2.second;
 
 					// Ignore if target object cant interact
-					if (!target->bCollideWithObjects) continue;
+					if (!target->bCollideWithObjects)
+						continue;
 
 					// Don't test against self
-					if (target == object) continue;
+					if (target == object)
+						continue;
 
 					// Quick check to see if objects overlap...
 					if ((target->pos - object->pos).mag2() <= (target->fRadius + object->fRadius) * (target->fRadius + object->fRadius))
@@ -314,8 +312,6 @@ void olc::rcw::Engine::Update(float fElapsedTime)
 						if (object->bNotifyObjectCollision)
 							HandleObjectVsObject(object, target);
 					}
-
-
 				}
 			}
 
@@ -326,11 +322,8 @@ void olc::rcw::Engine::Update(float fElapsedTime)
 				// to account for diagonal collisions, and corner collisions.
 				olc::vi2d vCurrentCell = object->pos;
 				olc::vi2d vTargetCell = vPotentialPosition;
-				olc::vi2d vAreaTL = { std::min(vCurrentCell.x, vTargetCell.x) - 1, std::min(vCurrentCell.y, vTargetCell.y) - 1 };
-				olc::vi2d vAreaBR = { std::max(vCurrentCell.x, vTargetCell.x) + 1, std::max(vCurrentCell.y, vTargetCell.y) + 1 };
-
-
-
+				olc::vi2d vAreaTL = {std::min(vCurrentCell.x, vTargetCell.x) - 1, std::min(vCurrentCell.y, vTargetCell.y) - 1};
+				olc::vi2d vAreaBR = {std::max(vCurrentCell.x, vTargetCell.x) + 1, std::max(vCurrentCell.y, vTargetCell.y) + 1};
 
 				// Iterate through each cell in test area
 				olc::vi2d vCell;
@@ -347,7 +340,7 @@ void olc::rcw::Engine::Update(float fElapsedTime)
 							// collided.
 
 							olc::vf2d vNearestPoint;
-							// Inspired by this (very clever btw) 
+							// Inspired by this (very clever btw)
 							// https://stackoverflow.com/questions/45370692/circle-rectangle-collision-response
 							vNearestPoint.x = std::max(float(vCell.x), std::min(vPotentialPosition.x, float(vCell.x + 1)));
 							vNearestPoint.y = std::max(float(vCell.y), std::min(vPotentialPosition.y, float(vCell.y + 1)));
@@ -355,9 +348,10 @@ void olc::rcw::Engine::Update(float fElapsedTime)
 							// But modified to work :P
 							olc::vf2d vRayToNearest = vNearestPoint - vPotentialPosition;
 							float fOverlap = object->fRadius - vRayToNearest.mag();
-							if (std::isnan(fOverlap)) fOverlap = 0;// Thanks Dandistine!
+							if (std::isnan(fOverlap))
+								fOverlap = 0; // Thanks Dandistine!
 
-							// If overlap is positive, then a collision has occurred, so we displace backwards by the 
+							// If overlap is positive, then a collision has occurred, so we displace backwards by the
 							// overlap amount. The potential position is then tested against other tiles in the area
 							// therefore "statically" resolving the collision
 							if (fOverlap > 0)
@@ -369,10 +363,14 @@ void olc::rcw::Engine::Update(float fElapsedTime)
 								if (object->bNotifySceneryCollision)
 								{
 									olc::rcw::Engine::CellSide side = olc::rcw::Engine::CellSide::Bottom;
-									if (vNearestPoint.x == float(vCell.x)) side = olc::rcw::Engine::CellSide::West;
-									if (vNearestPoint.x == float(vCell.x + 1)) side = olc::rcw::Engine::CellSide::East;
-									if (vNearestPoint.y == float(vCell.y)) side = olc::rcw::Engine::CellSide::North;
-									if (vNearestPoint.y == float(vCell.y + 1)) side = olc::rcw::Engine::CellSide::South;
+									if (vNearestPoint.x == float(vCell.x))
+										side = olc::rcw::Engine::CellSide::West;
+									if (vNearestPoint.x == float(vCell.x + 1))
+										side = olc::rcw::Engine::CellSide::East;
+									if (vNearestPoint.y == float(vCell.y))
+										side = olc::rcw::Engine::CellSide::North;
+									if (vNearestPoint.y == float(vCell.y + 1))
+										side = olc::rcw::Engine::CellSide::South;
 
 									HandleObjectVsScenery(object, vCell.x, vCell.y, side, vNearestPoint.x - float(vCell.x), vNearestPoint.y - float(vCell.y));
 								}
@@ -394,13 +392,12 @@ void olc::rcw::Engine::Render()
 	auto DepthDraw = [&](int x, int y, float z, olc::Pixel p)
 	{
 		if (z <= pDepthBuffer[y * vScreenSize.x + x])
-		{			
+		{
 			pge->Draw(x, y, p);
 			pDepthBuffer[y * vScreenSize.x + x] = z;
 		}
 	};
 
-	
 	// Clear screen and depth buffer ========================================
 	// pge->Clear(olc::BLACK); <- Left to user to decide
 	for (int i = 0; i < vScreenSize.x * vScreenSize.y; i++)
@@ -415,12 +412,12 @@ void olc::rcw::Engine::Render()
 		float fRayAngle = (fCameraHeading - (fFieldOfView / 2.0f)) + (float(x) / vFloatScreenSize.x) * fFieldOfView;
 
 		// ...create unit vector for that ray...
-		olc::vf2d vRayDirection = { std::cos(fRayAngle), std::sin(fRayAngle) };
+		olc::vf2d vRayDirection = {std::cos(fRayAngle), std::sin(fRayAngle)};
 
 		// ... and cast ray into world, see what it hits (if anything)
 		sTileHit hit;
 
-		// Assuming it hits nothing, then we draw to the middle of the screen (far far away)				
+		// Assuming it hits nothing, then we draw to the middle of the screen (far far away)
 		float fRayLength = INFINITY;
 
 		// Otherwise...
@@ -460,7 +457,7 @@ void olc::rcw::Engine::Render()
 				float fPlaneSampleX = vPlanePoint.x - nPlaneTileX;
 				float fPlaneSampleY = vPlanePoint.y - nPlaneTileY;
 
-				// Location is marked as ceiling					
+				// Location is marked as ceiling
 				olc::Pixel pixel = SelectSceneryPixel(nPlaneTileX, nPlaneTileY, olc::rcw::Engine::CellSide::Top, fPlaneSampleX, fPlaneSampleY, fPlaneZ);
 
 				// Draw ceiling pixel - no depth buffer required
@@ -514,14 +511,15 @@ void olc::rcw::Engine::Render()
 	// sort objects
 
 	// Iterate through all in game objects
-	for (const auto& ob : mapObjects)
+	for (const auto &ob : mapObjects)
 	{
 		const std::shared_ptr<olc::rcw::Object> object = ob.second;
 
 		// If object is invisible, nothing to do - this is useful
 		// for both effects, and making sure we dont render the
 		// "player" at the camera location perhaps
-		if (!object->bVisible) continue;
+		if (!object->bVisible)
+			continue;
 
 		// Create vector from camera to object
 		olc::vf2d vObject = object->pos - vCameraPos;
@@ -531,8 +529,10 @@ void olc::rcw::Engine::Render()
 
 		// Check if object center is within camera FOV...
 		float fObjectAngle = atan2f(vObject.y, vObject.x) - fCameraHeading;
-		if (fObjectAngle < -3.14159f) fObjectAngle += 2.0f * 3.14159f;
-		if (fObjectAngle > 3.14159f) fObjectAngle -= 2.0f * 3.14159f;
+		if (fObjectAngle < -3.14159f)
+			fObjectAngle += 2.0f * 3.14159f;
+		if (fObjectAngle > 3.14159f)
+			fObjectAngle -= 2.0f * 3.14159f;
 
 		// ...with a bias based upon distance - allows us to have object centers offscreen
 		bool bInPlayerFOV = fabs(fObjectAngle) < (fFieldOfView + (1.0f / fDistanceToObject)) / 2.0f;
@@ -550,7 +550,7 @@ void olc::rcw::Engine::Render()
 			vFloorPoint.y = (vFloatScreenSize.y / 2.0f) + (vFloatScreenSize.y / fDistanceToObject) / std::cos(fObjectAngle / 2.0f);
 
 			// First we need the objects size...
-			olc::vf2d vObjectSize = { float(GetObjectWidth(object->nGenericID)), float(GetObjectHeight(object->nGenericID)) };
+			olc::vf2d vObjectSize = {float(GetObjectWidth(object->nGenericID)), float(GetObjectHeight(object->nGenericID))};
 
 			// ...which we can scale into world space (maintaining aspect ratio)...
 			vObjectSize *= 2.0f * vFloatScreenSize.y;
@@ -563,7 +563,7 @@ void olc::rcw::Engine::Render()
 
 			// ...which is relative to the objects size and assumes the middle of the object is
 			// the location in world space
-			vObjectTopLeft = { vFloorPoint.x - vObjectSize.x / 2.0f, vFloorPoint.y - vObjectSize.y };
+			vObjectTopLeft = {vFloorPoint.x - vObjectSize.x / 2.0f, vFloorPoint.y - vObjectSize.y};
 
 			// Now iterate through the objects screen pixels
 			for (float y = 0; y < vObjectSize.y; y++)
@@ -576,12 +576,14 @@ void olc::rcw::Engine::Render()
 
 					// Get pixel from a suitable texture
 					float fNiceAngle = fCameraHeading - object->fHeading + 3.14159f / 4.0f;
-					if (fNiceAngle < 0) fNiceAngle += 2.0f * 3.14159f;
-					if (fNiceAngle > 2.0f * 3.14159f) fNiceAngle -= 2.0f * 3.14159f;
+					if (fNiceAngle < 0)
+						fNiceAngle += 2.0f * 3.14159f;
+					if (fNiceAngle > 2.0f * 3.14159f)
+						fNiceAngle -= 2.0f * 3.14159f;
 					olc::Pixel p = SelectObjectPixel(object->nGenericID, fSampleX, fSampleY, fDistanceToObject, fNiceAngle);
 
 					// Calculate screen pixel location
-					olc::vi2d a = { int(vObjectTopLeft.x + x), int(vObjectTopLeft.y + y) };
+					olc::vi2d a = {int(vObjectTopLeft.x + x), int(vObjectTopLeft.y + y)};
 
 					// Check if location is actually on screen (to not go OOB on depth buffer)
 					// and if the pixel is indeed visible (has no transparency component)
@@ -597,15 +599,17 @@ void olc::rcw::Engine::Render()
 }
 
 void olc::rcw::Engine::HandleObjectVsScenery(std::shared_ptr<olc::rcw::Object> object, const int tile_x, const int tile_y, const olc::rcw::Engine::CellSide side, const float offset_x, const float offset_y)
-{}
+{
+}
 
 void olc::rcw::Engine::HandleObjectVsObject(std::shared_ptr<olc::rcw::Object> object1, std::shared_ptr<olc::rcw::Object> object2)
-{}
+{
+}
 
 // Will be explained in upcoming video...
-bool olc::rcw::Engine::CastRayDDA(const olc::vf2d& vOrigin, const olc::vf2d& vDirection, sTileHit& hit)
+bool olc::rcw::Engine::CastRayDDA(const olc::vf2d &vOrigin, const olc::vf2d &vDirection, sTileHit &hit)
 {
-	olc::vf2d vRayDelta = { sqrt(1 + (vDirection.y / vDirection.x) * (vDirection.y / vDirection.x)), sqrt(1 + (vDirection.x / vDirection.y) * (vDirection.x / vDirection.y)) };
+	olc::vf2d vRayDelta = {sqrt(1 + (vDirection.y / vDirection.x) * (vDirection.y / vDirection.x)), sqrt(1 + (vDirection.x / vDirection.y) * (vDirection.x / vDirection.y))};
 
 	olc::vi2d vMapCheck = vOrigin;
 	olc::vf2d vSideDistance;
@@ -651,9 +655,8 @@ bool olc::rcw::Engine::CastRayDDA(const olc::vf2d& vOrigin, const olc::vf2d& vDi
 			vMapCheck.y += vStepDistance.y;
 		}
 
-		olc::vf2d rayDist = { (float)vMapCheck.x - vOrigin.x, (float)vMapCheck.y - vOrigin.y };
+		olc::vf2d rayDist = {(float)vMapCheck.x - vOrigin.x, (float)vMapCheck.y - vOrigin.y};
 		fDistance = rayDist.mag();
-
 
 		if (IsLocationSolid(float(vMapCheck.x), float(vMapCheck.y)))
 		{
@@ -662,11 +665,9 @@ bool olc::rcw::Engine::CastRayDDA(const olc::vf2d& vOrigin, const olc::vf2d& vDi
 
 			hit.vTilePos = vMapCheck;
 
-
 			// Find accurate Hit Location
 
 			float m = vDirection.y / vDirection.x;
-
 
 			// From Top Left
 
@@ -693,7 +694,6 @@ bool olc::rcw::Engine::CastRayDDA(const olc::vf2d& vOrigin, const olc::vf2d& vDi
 					vIntersection.x = (vMapCheck.y - vOrigin.y) / m + vOrigin.x;
 					hit.fSampleX = vIntersection.x - std::floor(vIntersection.x);
 				}
-
 
 				if (vIntersection.y < vMapCheck.y)
 				{
@@ -759,7 +759,6 @@ bool olc::rcw::Engine::CastRayDDA(const olc::vf2d& vOrigin, const olc::vf2d& vDi
 
 	return bTileFound;
 }
-
 
 #endif // OLC_PGEX_RAYCASTWORLD
 #endif // OLC_PGEX_RAYCASTWORLD_H

@@ -48,7 +48,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2019, 2020, 2021, 2022
+	David Barr, aka javidx9, ï¿½OneLoneCoder 2019, 2020, 2021, 2022
 
 */
 
@@ -71,7 +71,7 @@ namespace olc::utils
 
 	public:
 		// Sets the String Value of a Property (for a given index)
-		inline void SetString(const std::string& sString, const size_t nItem = 0)
+		inline void SetString(const std::string &sString, const size_t nItem = 0)
 		{
 			if (nItem >= m_vContent.size())
 				m_vContent.resize(nItem + 1);
@@ -120,13 +120,13 @@ namespace olc::utils
 
 		// Checks if a property exists - useful to avoid creating properties
 		// via reading them, though non-essential
-		inline bool HasProperty(const std::string& sName) const
+		inline bool HasProperty(const std::string &sName) const
 		{
 			return m_mapObjects.count(sName) > 0;
 		}
 
 		// Access a datafile via a convenient name - "root.node.something.property"
-		inline datafile& GetProperty(const std::string& name)
+		inline datafile &GetProperty(const std::string &name)
 		{
 			size_t x = name.find_first_of('.');
 			if (x != std::string::npos)
@@ -144,7 +144,7 @@ namespace olc::utils
 		}
 
 		// Access a numbered element - "node[23]", or "root[56].node"
-		inline datafile& GetIndexedProperty(const std::string& name, const size_t nIndex)
+		inline datafile &GetIndexedProperty(const std::string &name, const size_t nIndex)
 		{
 			return GetProperty(name + "[" + std::to_string(nIndex) + "]");
 		}
@@ -152,7 +152,7 @@ namespace olc::utils
 	public:
 		// Writes a "datafile" node (and all of its child nodes and properties) recursively
 		// to a file.
-		inline static bool Write(const datafile& n, const std::string& sFileName, const std::string& sIndent = "\t", const char sListSep = ',')
+		inline static bool Write(const datafile &n, const std::string &sFileName, const std::string &sIndent = "\t", const char sListSep = ',')
 		{
 			// Cache indentation level
 			size_t nIndentCount = 0;
@@ -160,24 +160,25 @@ namespace olc::utils
 			std::string sSeperator = std::string(1, sListSep) + " ";
 
 			// Fully specified lambda, because this lambda is recursive!
-			std::function<void(const datafile&, std::ofstream&)> write = [&](const datafile& n, std::ofstream& file)
+			std::function<void(const datafile &, std::ofstream &)> write = [&](const datafile &n, std::ofstream &file)
 			{
 				// Lambda creates string given indentation preferences
-				auto indent = [&](const std::string& sString, const size_t nCount)
+				auto indent = [&](const std::string &sString, const size_t nCount)
 				{
 					std::string sOut;
-					for (size_t n = 0; n < nCount; n++) sOut += sString;
+					for (size_t n = 0; n < nCount; n++)
+						sOut += sString;
 					return sOut;
 				};
 
 				// Iterate through each property of this node
-				for (auto const& property : n.m_vecObjects)
+				for (auto const &property : n.m_vecObjects)
 				{
 					// Does property contain any sub objects?
 					if (property.second.m_vecObjects.empty())
 					{
 						// No, so it's an assigned field and should just be written. If the property
-						// is flagged as comment, it has no assignment potential. First write the 
+						// is flagged as comment, it has no assignment potential. First write the
 						// property name
 						file << indent(sIndent, nIndentCount) << property.first << (property.second.m_bIsComment ? "" : " = ");
 
@@ -187,7 +188,7 @@ namespace olc::utils
 						for (size_t i = 0; i < property.second.GetValueCount(); i++)
 						{
 							// If the Value being written, in string form, contains the separation
-							// character, then the value must be written inside quotation marks. Note, 
+							// character, then the value must be written inside quotation marks. Note,
 							// that if the Value is the last of a list of Values for a property, it is
 							// not suffixed with the separator
 							size_t x = property.second.GetString(i).find_first_of(sListSep);
@@ -211,7 +212,8 @@ namespace olc::utils
 					{
 						// Yes, property has properties of its own, so it's a node
 						// Force a new line and write out the node's name
-						file << "\n" << indent(sIndent, nIndentCount) << property.first << "\n";
+						file << "\n"
+							 << indent(sIndent, nIndentCount) << property.first << "\n";
 						// Open braces, and update indentation
 						file << indent(sIndent, nIndentCount) << "{\n";
 						nIndentCount++;
@@ -224,7 +226,8 @@ namespace olc::utils
 
 				// We've finished writing out a node, regardless of state, our indentation
 				// must decrease, unless we're top level
-				if (nIndentCount > 0) nIndentCount--;
+				if (nIndentCount > 0)
+					nIndentCount--;
 			};
 
 			// Start Here! Open the file for writing
@@ -238,7 +241,7 @@ namespace olc::utils
 			return false;
 		}
 
-		inline static bool Read(datafile& n, const std::string& sFileName, const char sListSep = ',')
+		inline static bool Read(datafile &n, const std::string &sFileName, const char sListSep = ',')
 		{
 			// Open the file!
 			std::ifstream file(sFileName);
@@ -254,13 +257,12 @@ namespace olc::utils
 				// stored in a stack, but one is constructed implicitly via the nodes
 				// owning other nodes (aka a tree)
 
-				// I dont want to accidentally create copies all over the place, nor do 
+				// I dont want to accidentally create copies all over the place, nor do
 				// I want to use pointer syntax, so being a bit different and stupidly
 				// using std::reference_wrapper, so I can store references to datafile
 				// nodes in a std::container.
 				std::stack<std::reference_wrapper<datafile>> stkPath;
 				stkPath.push(n);
-
 
 				// Read file line by line and process
 				while (!file.eof())
@@ -271,7 +273,7 @@ namespace olc::utils
 
 					// This little lambda removes whitespace from
 					// beginning and end of supplied string
-					auto trim = [](std::string& s)
+					auto trim = [](std::string &s)
 					{
 						s.erase(0, s.find_first_not_of(" \t\n\r\f\v"));
 						s.erase(s.find_last_not_of(" \t\n\r\f\v") + 1);
@@ -288,7 +290,7 @@ namespace olc::utils
 							// ...it is a comment, so ignore
 							datafile comment;
 							comment.m_bIsComment = true;
-							stkPath.top().get().m_vecObjects.push_back({ line, comment });
+							stkPath.top().get().m_vecObjects.push_back({line, comment});
 						}
 						else
 						{
@@ -402,16 +404,16 @@ namespace olc::utils
 		}
 
 	public:
-		inline datafile& operator[](const std::string& name)
+		inline datafile &operator[](const std::string &name)
 		{
 			// Check if this "node"'s map already contains an object with this name...
 			if (m_mapObjects.count(name) == 0)
 			{
-				// ...it did not! So create this object in the map. First get a vector id 
+				// ...it did not! So create this object in the map. First get a vector id
 				// and link it with the name in the unordered_map
 				m_mapObjects[name] = m_vecObjects.size();
 				// then creating the new, blank object in the vector of objects
-				m_vecObjects.push_back({ name, datafile() });
+				m_vecObjects.push_back({name, datafile()});
 			}
 
 			// ...it exists! so return the object, by getting its index from the map, and using that
@@ -426,7 +428,7 @@ namespace olc::utils
 		// Linkage to create "ordered" unordered_map. We have a vector of
 		// "properties", and the index to a specific element is mapped.
 		std::vector<std::pair<std::string, datafile>> m_vecObjects;
-		std::unordered_map<std::string, size_t>       m_mapObjects;
+		std::unordered_map<std::string, size_t> m_mapObjects;
 
 	protected:
 		// Used to identify if a property is a comment or not, not user facing

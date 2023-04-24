@@ -45,7 +45,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2019, 2020, 2021, 2022
+	David Barr, aka javidx9, ï¿½OneLoneCoder 2019, 2020, 2021, 2022
 
 */
 
@@ -55,7 +55,6 @@
 // PGEX Require the presence of olc::PixelGameEngine
 #define OLC_PGEX_QUICKGUI
 #include "extensions/olcPGEX_QuickGUI.h"
-
 
 class olcDemo_QuickGUI : public olc::PixelGameEngine
 {
@@ -68,87 +67,86 @@ public:
 protected:
 	olc::QuickGUI::Manager guiManager;
 
-	olc::QuickGUI::Slider* guiSlider1 = nullptr;
-	olc::QuickGUI::Slider* guiSlider2 = nullptr;
-	olc::QuickGUI::Slider* guiSlider3 = nullptr;
+	olc::QuickGUI::Slider *guiSlider1 = nullptr;
+	olc::QuickGUI::Slider *guiSlider2 = nullptr;
+	olc::QuickGUI::Slider *guiSlider3 = nullptr;
 
-	olc::QuickGUI::Button* guiButton1 = nullptr;
-	olc::QuickGUI::Button* guiButton2 = nullptr;
-	olc::QuickGUI::Button* guiButton3 = nullptr;
+	olc::QuickGUI::Button *guiButton1 = nullptr;
+	olc::QuickGUI::Button *guiButton2 = nullptr;
+	olc::QuickGUI::Button *guiButton3 = nullptr;
 
-	olc::QuickGUI::Slider* guiThemeColourR = nullptr;
-	olc::QuickGUI::Slider* guiThemeColourG = nullptr;
-	olc::QuickGUI::Slider* guiThemeColourB = nullptr;
+	olc::QuickGUI::Slider *guiThemeColourR = nullptr;
+	olc::QuickGUI::Slider *guiThemeColourG = nullptr;
+	olc::QuickGUI::Slider *guiThemeColourB = nullptr;
 
-	olc::QuickGUI::Label* guiLabelR = nullptr;
-	olc::QuickGUI::Label* guiLabelG = nullptr;
-	olc::QuickGUI::Label* guiLabelB = nullptr;
+	olc::QuickGUI::Label *guiLabelR = nullptr;
+	olc::QuickGUI::Label *guiLabelG = nullptr;
+	olc::QuickGUI::Label *guiLabelB = nullptr;
 
-	olc::QuickGUI::CheckBox* guiCheckBox1 = nullptr;
+	olc::QuickGUI::CheckBox *guiCheckBox1 = nullptr;
 
-	olc::QuickGUI::TextBox* guiTextBox1 = nullptr;
-	olc::QuickGUI::TextBox* guiTextBox2 = nullptr;
-
+	olc::QuickGUI::TextBox *guiTextBox1 = nullptr;
+	olc::QuickGUI::TextBox *guiTextBox2 = nullptr;
 
 	std::vector<std::string> listExample;
-	olc::QuickGUI::ListBox* guiListBox = nullptr;
+	olc::QuickGUI::ListBox *guiListBox = nullptr;
 
 public:
 	bool OnUserCreate() override
 	{
 		// Horizontal Slider
-		guiSlider1 = new olc::QuickGUI::Slider(guiManager, 
-			{ 30.0f, 10.0f }, { 246.0f, 10.0f }, 0, 100, 50);
+		guiSlider1 = new olc::QuickGUI::Slider(guiManager,
+											   {30.0f, 10.0f}, {246.0f, 10.0f}, 0, 100, 50);
 		// Diagonal Slider!
-		guiSlider2 = new olc::QuickGUI::Slider(guiManager, 
-			{ 20.0f, 20.0f }, { 120.0f, 120.0f }, 0, 100, 50);
+		guiSlider2 = new olc::QuickGUI::Slider(guiManager,
+											   {20.0f, 20.0f}, {120.0f, 120.0f}, 0, 100, 50);
 		// Vertical Slider
-		guiSlider3 = new olc::QuickGUI::Slider(guiManager, 
-			{ 10.0f, 30.0f }, { 10.0f, 230.0f }, 0, 100, 50);
+		guiSlider3 = new olc::QuickGUI::Slider(guiManager,
+											   {10.0f, 30.0f}, {10.0f, 230.0f}, 0, 100, 50);
 
 		// Theme colour slider - Red
 		guiThemeColourR = new olc::QuickGUI::Slider(guiManager,
-			{ 150.0f, 30.0f }, { 246.0f, 30.0f }, 0, 255, 0);
+													{150.0f, 30.0f}, {246.0f, 30.0f}, 0, 255, 0);
 		// Theme colour slider - Green
 		guiThemeColourG = new olc::QuickGUI::Slider(guiManager,
-			{ 150.0f, 50.0f }, { 246.0f, 50.0f }, 0, 255, 0);
+													{150.0f, 50.0f}, {246.0f, 50.0f}, 0, 255, 0);
 		// Theme colour slider - Blue
 		guiThemeColourB = new olc::QuickGUI::Slider(guiManager,
-			{ 150.0f, 70.0f }, { 246.0f, 70.0f }, 0, 255, 128);
+													{150.0f, 70.0f}, {246.0f, 70.0f}, 0, 255, 128);
 
 		// Labels for theme colour sliders
 		guiLabelR = new olc::QuickGUI::Label(guiManager,
-			"Red:", { 80.0f, 22.0f }, { 50.0f, 16.0f });
+											 "Red:", {80.0f, 22.0f}, {50.0f, 16.0f});
 		guiLabelG = new olc::QuickGUI::Label(guiManager,
-			"Green:", { 80.0f, 42.0f }, { 50.0f, 16.0f });
+											 "Green:", {80.0f, 42.0f}, {50.0f, 16.0f});
 		guiLabelB = new olc::QuickGUI::Label(guiManager,
-			"Blue:", { 80.0f, 62.0f }, { 50.0f, 16.0f });
+											 "Blue:", {80.0f, 62.0f}, {50.0f, 16.0f});
 
 		// Customize how the labels look
-		guiLabelB->nAlign = olc::QuickGUI::Label::Alignment::Right;		
+		guiLabelB->nAlign = olc::QuickGUI::Label::Alignment::Right;
 		guiLabelG->nAlign = olc::QuickGUI::Label::Alignment::Right;
-		guiLabelG->bHasBorder = true;		
+		guiLabelG->bHasBorder = true;
 		guiLabelR->nAlign = olc::QuickGUI::Label::Alignment::Right;
 		guiLabelR->bHasBorder = true;
 		guiLabelR->bHasBackground = true;
 
 		// Some Buttons, 1 is just a thing, 2 has its text updated and 3 resets the theme
 		guiButton1 = new olc::QuickGUI::Button(guiManager,
-			"Button 1", { 30.0f, 150.0f }, { 100.0f, 16.0f });
+											   "Button 1", {30.0f, 150.0f}, {100.0f, 16.0f});
 		guiButton2 = new olc::QuickGUI::Button(guiManager,
-			"Button 2", { 30.0f, 170.0f }, { 100.0f, 16.0f });
+											   "Button 2", {30.0f, 170.0f}, {100.0f, 16.0f});
 		guiButton3 = new olc::QuickGUI::Button(guiManager,
-			"Reset Theme", { 30.0f, 190.0f }, { 100.0f, 16.0f });
+											   "Reset Theme", {30.0f, 190.0f}, {100.0f, 16.0f});
 
 		// A CheckBox, switches between sprite or decal drawing
 		guiCheckBox1 = new olc::QuickGUI::CheckBox(guiManager,
-			"Use Decals", false, { 30.0f, 210.0f }, { 100.0f, 16.0f });
+												   "Use Decals", false, {30.0f, 210.0f}, {100.0f, 16.0f});
 
 		// TextBox, allows basic text entry
 		guiTextBox1 = new olc::QuickGUI::TextBox(guiManager,
-			"", { 150.0f, 140.0f }, { 100.0f, 16.0f });
+												 "", {150.0f, 140.0f}, {100.0f, 16.0f});
 		guiTextBox2 = new olc::QuickGUI::TextBox(guiManager,
-			"0.04", { 150.0f, 160.0f }, { 100.0f, 16.0f });
+												 "0.04", {150.0f, 160.0f}, {100.0f, 16.0f});
 
 		listExample.push_back("Item 1");
 		listExample.push_back("Item 2");
@@ -158,7 +156,7 @@ public:
 		listExample.push_back("Item 6");
 
 		guiListBox = new olc::QuickGUI::ListBox(guiManager,
-			listExample, { 150.0f, 180.0f }, { 100.0f, 54.0f });
+												listExample, {150.0f, 180.0f}, {100.0f, 54.0f});
 
 		// but but but.... waaaaaaaaahaaaaaaaa.... where do I delete these horrible
 		// pointers??? I just can't accept that addressable memory exists and it makes
@@ -199,11 +197,10 @@ public:
 		}
 
 		// 004) Link Slider 2 and Slider 3 together
-		if(guiSlider2->bHeld)
+		if (guiSlider2->bHeld)
 			guiSlider3->fValue = 100.0f - guiSlider2->fValue;
 		if (guiSlider3->bHeld)
 			guiSlider2->fValue = 100.0f - guiSlider3->fValue;
-		
 
 		// Draw Stuff!
 		Clear(olc::BLACK);

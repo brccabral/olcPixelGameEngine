@@ -48,7 +48,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2019, 2020, 2021, 2022
+	David Barr, aka javidx9, ï¿½OneLoneCoder 2019, 2020, 2021, 2022
 
 
 	Changes
@@ -56,7 +56,6 @@
 	v1.01:		Bug fix clear() function
 
 */
-
 
 /*
 	WARNING! VECTORS OF QUAD-TREES
@@ -70,20 +69,17 @@
 	occur.
 */
 
-
 #pragma once
 
 #include "olcPixelGameEngine.h"
 #include "olcUTIL_Geometry2D.h"
-
-
 
 namespace olc::utils
 {
 	template <typename T, typename CTYPE = float>
 	struct QuadTreeItemLocation
 	{
-		typename std::list<std::pair<geom2d::rect<CTYPE>, T>>* container = nullptr;
+		typename std::list<std::pair<geom2d::rect<CTYPE>, T>> *container = nullptr;
 		typename std::list<std::pair<geom2d::rect<CTYPE>, T>>::iterator iterator;
 	};
 
@@ -91,7 +87,7 @@ namespace olc::utils
 	class DynamicQuadTree
 	{
 	public:
-		DynamicQuadTree(const geom2d::rect<CTYPE>& size, const size_t nDepth = 0, const size_t nMaxDepth = 8)
+		DynamicQuadTree(const geom2d::rect<CTYPE> &size, const size_t nDepth = 0, const size_t nMaxDepth = 8)
 		{
 			m_depth = nDepth;
 			m_rect = size;
@@ -100,7 +96,7 @@ namespace olc::utils
 		}
 
 		// Insert a region into this area
-		QuadTreeItemLocation<pT> insert(const pT item, const geom2d::rect<CTYPE>& itemsize)
+		QuadTreeItemLocation<pT> insert(const pT item, const geom2d::rect<CTYPE> &itemsize)
 		{
 			for (int i = 0; i < 4; i++)
 			{
@@ -123,11 +119,11 @@ namespace olc::utils
 			}
 
 			// It didnt fit, so item must belong to this geom2d::rect<CTYPE>
-			m_pItems.push_back({ itemsize, item });
-			return { &m_pItems, std::prev(m_pItems.end()) };
+			m_pItems.push_back({itemsize, item});
+			return {&m_pItems, std::prev(m_pItems.end())};
 		}
 
-		void relocate(pT item, const geom2d::rect<CTYPE>& rArea)
+		void relocate(pT item, const geom2d::rect<CTYPE> &rArea)
 		{
 			// Remove it
 			remove(item);
@@ -140,17 +136,18 @@ namespace olc::utils
 		{
 			size_t nCount = m_pItems.size();
 			for (int i = 0; i < 4; i++)
-				if (m_pChild[i]) nCount += m_pChild[i]->size();
+				if (m_pChild[i])
+					nCount += m_pChild[i]->size();
 			return nCount;
 		}
 
-		void search(const geom2d::rect<CTYPE>& rArea, std::list<pT>& listItems) const
+		void search(const geom2d::rect<CTYPE> &rArea, std::list<pT> &listItems) const
 		{
 			// First, check for items belonging to this area, add them to the list
 			// if there is overlap
-			for (const auto& p : m_pItems)
+			for (const auto &p : m_pItems)
 			{
-				if (geom2d::overlaps(rArea,p.first))
+				if (geom2d::overlaps(rArea, p.first))
 					listItems.push_back(p.second);
 			}
 
@@ -162,27 +159,26 @@ namespace olc::utils
 				{
 					// If child is entirely contained within area, recursively
 					// add all of its children, no need to check boundaries
-					if (geom2d::contains(rArea,m_rChild[i]))
+					if (geom2d::contains(rArea, m_rChild[i]))
 						m_pChild[i]->items(listItems);
 
 					// If child overlaps with search area then checks need
 					// to be made
-					else if (geom2d::overlaps(m_rChild[i],rArea))
+					else if (geom2d::overlaps(m_rChild[i], rArea))
 						m_pChild[i]->search(rArea, listItems);
 				}
 			}
-
-
 		}
 
-		void items(std::list<pT>& listItems) const
+		void items(std::list<pT> &listItems) const
 		{
 			// No questions asked, just return child items
-			for (const auto& p : m_pItems)
+			for (const auto &p : m_pItems)
 				listItems.push_back(p.second);
 
 			for (int i = 0; i < 4; i++)
-				if (m_pChild[i]) m_pChild[i]->items(listItems);
+				if (m_pChild[i])
+					m_pChild[i]->items(listItems);
 		}
 
 		void clear()
@@ -198,22 +194,20 @@ namespace olc::utils
 			}
 		}
 
-		void resize(const geom2d::rect<CTYPE>& rArea)
+		void resize(const geom2d::rect<CTYPE> &rArea)
 		{
 			clear();
 			m_rect = rArea;
 			olc::v2d_generic<CTYPE> vChildSize = m_rect.size / CTYPE(2);
 			m_rChild =
-			{
-				geom2d::rect<CTYPE>(m_rect.pos, vChildSize),
-				geom2d::rect<CTYPE>({m_rect.pos.x + vChildSize.x, m_rect.pos.y}, vChildSize),
-				geom2d::rect<CTYPE>({m_rect.pos.x, m_rect.pos.y + vChildSize.y}, vChildSize),
-				geom2d::rect<CTYPE>(m_rect.pos + vChildSize, vChildSize)
-			};
+				{
+					geom2d::rect<CTYPE>(m_rect.pos, vChildSize),
+					geom2d::rect<CTYPE>({m_rect.pos.x + vChildSize.x, m_rect.pos.y}, vChildSize),
+					geom2d::rect<CTYPE>({m_rect.pos.x, m_rect.pos.y + vChildSize.y}, vChildSize),
+					geom2d::rect<CTYPE>(m_rect.pos + vChildSize, vChildSize)};
 		}
 
-
-		const geom2d::rect<CTYPE>& area()
+		const geom2d::rect<CTYPE> &area()
 		{
 			return m_rect;
 		}
@@ -233,10 +227,9 @@ namespace olc::utils
 
 		// Items which belong to this quadnode
 		std::list<std::pair<geom2d::rect<CTYPE>, pT>> m_pItems;
-
 	};
 
-	template<typename T, typename CTYPE = float>
+	template <typename T, typename CTYPE = float>
 	struct QuadTreeItem
 	{
 		// The item Itself
@@ -253,19 +246,18 @@ namespace olc::utils
 		using IQuadtreeContainer = std::list<QuadTreeItem<T, CTYPE>>;
 
 	public:
-		QuadTreeContainer(const geom2d::rect<CTYPE>& size = { {0.0f, 0.0f}, { 100.0f, 100.0f } }, const size_t nDepth = 0, const size_t nMaxDepth = 8) : root(size, nDepth, nMaxDepth)
+		QuadTreeContainer(const geom2d::rect<CTYPE> &size = {{0.0f, 0.0f}, {100.0f, 100.0f}}, const size_t nDepth = 0, const size_t nMaxDepth = 8) : root(size, nDepth, nMaxDepth)
 		{
-
 		}
 
 		// Sets the spatial coverage area of teh quadtree
-		void resize(const geom2d::rect<CTYPE>& rArea)
+		void resize(const geom2d::rect<CTYPE> &rArea)
 		{
 			root.resize(rArea);
 		}
 
 		// Inserts an item into the quadtree
-		void insert(const T& item, const geom2d::rect<CTYPE>& itemsize)
+		void insert(const T &item, const geom2d::rect<CTYPE> &itemsize)
 		{
 			QuadTreeItem<T> newItem;
 			newItem.item = item;
@@ -278,14 +270,14 @@ namespace olc::utils
 		}
 
 		// Returns a std::list of pointers to items within the search area
-		std::list<typename IQuadtreeContainer::iterator> search(const geom2d::rect<CTYPE>& rArea) const
+		std::list<typename IQuadtreeContainer::iterator> search(const geom2d::rect<CTYPE> &rArea) const
 		{
 			std::list<typename IQuadtreeContainer::iterator> listItemPointers;
 			root.search(rArea, listItemPointers);
 			return listItemPointers;
 		}
 
-		void remove(typename IQuadtreeContainer::iterator& item)
+		void remove(typename IQuadtreeContainer::iterator &item)
 		{
 			// Iterator points to a QuadTreeItem
 			item->pItem.container->erase(item->pItem.iterator);
@@ -294,14 +286,13 @@ namespace olc::utils
 			m_allItems.erase(item);
 		}
 
-		void relocate(typename IQuadtreeContainer::iterator& item, const geom2d::rect<CTYPE>& itemsize)
+		void relocate(typename IQuadtreeContainer::iterator &item, const geom2d::rect<CTYPE> &itemsize)
 		{
 			// Remove pointer to item from whichever container its stored in
 			item->pItem.container->erase(item->pItem.iterator);
 
 			// Update the items pointer by reinsertion into geom2d::rect<CTYPE> tree
 			item->pItem = root.insert(item, itemsize);
-
 		}
 
 		typename IQuadtreeContainer::iterator begin()
@@ -335,7 +326,7 @@ namespace olc::utils
 			root.clear();
 		}
 
-		const geom2d::rect<CTYPE>& area()
+		const geom2d::rect<CTYPE> &area()
 		{
 			return root.area();
 		}

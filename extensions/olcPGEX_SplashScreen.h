@@ -58,7 +58,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2019, 2020, 2021, 2022, 2023, 2024
+	David Barr, aka javidx9, ï¿½OneLoneCoder 2019, 2020, 2021, 2022, 2023, 2024
 
 	Revisions:
 	1.00:	Initial Release
@@ -77,7 +77,7 @@ namespace olc
 
 	protected:
 		virtual void OnAfterUserCreate() override;
-		virtual bool OnBeforeUserUpdate(float& fElapsedTime) override;
+		virtual bool OnBeforeUserUpdate(float &fElapsedTime) override;
 
 	private:
 		olc::Renderable spr;
@@ -89,7 +89,6 @@ namespace olc
 		bool bComplete = false;
 	};
 
-
 }
 
 #ifdef OLC_PGEX_SPLASHSCREEN
@@ -98,7 +97,7 @@ namespace olc
 namespace olc
 {
 	SplashScreen::SplashScreen() : olc::PGEX(true)
-	{		
+	{
 	}
 
 	void SplashScreen::OnAfterUserCreate()
@@ -144,20 +143,32 @@ namespace olc
 				olc::Pixel p = olc::RED;
 				switch ((r & 0xC00000) >> 22)
 				{
-				case 0: p = olc::Pixel(0, 0, 0, 255);  break;
-				case 1: p = olc::Pixel(255, 255, 255, 255);  break;
-				case 2: p = olc::Pixel(255, 120, 26, 255);  break;
-				case 3: p = olc::Pixel(79, 193, 255, 255);  break;
+				case 0:
+					p = olc::Pixel(0, 0, 0, 255);
+					break;
+				case 1:
+					p = olc::Pixel(255, 255, 255, 255);
+					break;
+				case 2:
+					p = olc::Pixel(255, 120, 26, 255);
+					break;
+				case 3:
+					p = olc::Pixel(79, 193, 255, 255);
+					break;
 				}
 				spr.Sprite()->SetPixel(px, py, p);
-				if (++px == 203) { py++; px = 0; }
+				if (++px == 203)
+				{
+					py++;
+					px = 0;
+				}
 				r <<= 2;
 			}
 		}
 
 		spr.Decal()->Update();
 		vBoom.resize(spr.Sprite()->width * spr.Sprite()->height);
-		vScale = { float(pge->ScreenWidth()) / 500.0f, float(pge->ScreenWidth()) / 500.0f };
+		vScale = {float(pge->ScreenWidth()) / 500.0f, float(pge->ScreenWidth()) / 500.0f};
 		fAspect = float(pge->ScreenWidth()) / float(pge->ScreenHeight());
 		vPosition = olc::vf2d(
 			(250 - spr.Sprite()->width) / 2.0f,
@@ -168,13 +179,13 @@ namespace olc
 					vPosition + olc::vf2d(x, y),
 					olc::vf2d(
 						(float(rand()) / float(RAND_MAX)) * 10.0f - 5.0f,
-						(float(rand()) / float(RAND_MAX)) * 10.0f - 5.0f)
-				);
+						(float(rand()) / float(RAND_MAX)) * 10.0f - 5.0f));
 	}
 
-	bool SplashScreen::OnBeforeUserUpdate(float& fElapsedTime)
+	bool SplashScreen::OnBeforeUserUpdate(float &fElapsedTime)
 	{
-		if (bComplete) return false;
+		if (bComplete)
+			return false;
 
 		fParticleTime += fElapsedTime;
 
@@ -182,23 +193,20 @@ namespace olc
 			for (int x = 0; x < spr.Sprite()->width; x++)
 			{
 
-
 				if (fParticleTime < 1.0f)
 				{
-
 				}
 				else if (fParticleTime < 2.0f)
 				{
 					vBoom[y * spr.Sprite()->width + x].first =
 						olc::vf2d(
 							(250 - spr.Sprite()->width) / 2.0f + float(x),
-							(250 - spr.Sprite()->height) / 2.0f / fAspect + float(y)
-						) +
+							(250 - spr.Sprite()->height) / 2.0f / fAspect + float(y)) +
 						olc::vf2d(
 							(float(rand()) / float(RAND_MAX)) * 0.5f - 0.25f,
 							(float(rand()) / float(RAND_MAX)) * 0.5f - 0.25f);
 				}
-				else if(fParticleTime < 5.0f)
+				else if (fParticleTime < 5.0f)
 				{
 					vBoom[y * spr.Sprite()->width + x].first += vBoom[y * spr.Sprite()->width + x].second * fElapsedTime * 20.0f;
 				}
@@ -207,7 +215,7 @@ namespace olc
 					bComplete = true;
 				}
 
-				pge->DrawPartialDecal(vScale * vBoom[y * spr.Sprite()->width + x].first * 2.0f, spr.Decal(), olc::vf2d(x, y), { 1, 1 }, vScale * 2.0f, olc::PixelF(1.0f, 1.0f, 1.0f, std::min(1.0f, std::max(4.0f - fParticleTime, 0.0f))));
+				pge->DrawPartialDecal(vScale * vBoom[y * spr.Sprite()->width + x].first * 2.0f, spr.Decal(), olc::vf2d(x, y), {1, 1}, vScale * 2.0f, olc::PixelF(1.0f, 1.0f, 1.0f, std::min(1.0f, std::max(4.0f - fParticleTime, 0.0f))));
 			}
 
 		olc::vi2d vSize = pge->GetTextSizeProp("Copyright OneLoneCoder.com 2024");

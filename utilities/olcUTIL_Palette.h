@@ -49,11 +49,11 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2019, 2020, 2021, 2022
+	David Barr, aka javidx9, ï¿½OneLoneCoder 2019, 2020, 2021, 2022
 
 */
 
-/*	
+/*
 	Example
 	~~~~~~~
 
@@ -84,10 +84,8 @@
 
 	// Access palette via index [0 ... 255]
 	// Discrete, Not Smooth, very fast
-	olc::Pixel i1 = pal.Index(10);			
+	olc::Pixel i1 = pal.Index(10);
 */
-
-
 
 #pragma once
 
@@ -117,27 +115,24 @@ namespace olc::utils
 				break;
 			case Stock::Greyscale:
 				vColours =
-				{
-					{0.0, olc::BLACK}, {1.0, olc::WHITE}
-				};
+					{
+						{0.0, olc::BLACK}, {1.0, olc::WHITE}};
 				break;
 			case Stock::ColdHot:
 				vColours =
-				{
-					{0.0, olc::CYAN}, {0.5, olc::BLACK}, {1.0, olc::YELLOW}
-				};
+					{
+						{0.0, olc::CYAN}, {0.5, olc::BLACK}, {1.0, olc::YELLOW}};
 				break;
 			case Stock::Spectrum:
 				vColours =
-				{
-					{0.0 / 6.0, olc::RED},
-					{1.0 / 6.0, olc::YELLOW},
-					{2.0 / 6.0, olc::GREEN},
-					{3.0 / 6.0, olc::CYAN},
-					{4.0 / 6.0, olc::BLUE},
-					{5.0 / 6.0, olc::MAGENTA},
-					{6.0 / 6.0, olc::RED}
-				};
+					{
+						{0.0 / 6.0, olc::RED},
+						{1.0 / 6.0, olc::YELLOW},
+						{2.0 / 6.0, olc::GREEN},
+						{3.0 / 6.0, olc::CYAN},
+						{4.0 / 6.0, olc::BLUE},
+						{5.0 / 6.0, olc::MAGENTA},
+						{6.0 / 6.0, olc::RED}};
 				break;
 			}
 
@@ -171,7 +166,7 @@ namespace olc::utils
 				// proportionally
 				auto it_p = std::prev(it);
 				return olc::PixelLerp(it_p->second, it->second,
-					float((i - it_p->first) / (it->first - it_p->first)));
+									  float((i - it_p->first) / (it->first - it_p->first)));
 			}
 		}
 
@@ -195,10 +190,10 @@ namespace olc::utils
 
 			// If d already exists, replace it
 			auto it = std::find_if(vColours.begin(), vColours.end(),
-				[&i](const std::pair<double, olc::Pixel>& p)
-				{
-					return p.first == i;
-				});
+								   [&i](const std::pair<double, olc::Pixel> &p)
+								   {
+									   return p.first == i;
+								   });
 
 			if (it != std::end(vColours))
 			{
@@ -208,12 +203,12 @@ namespace olc::utils
 			else
 			{
 				// Palette entry not found, sp add it, and sort palette vector
-				vColours.push_back({ i, col });
+				vColours.push_back({i, col});
 				std::sort(vColours.begin(), vColours.end(),
-					[](const std::pair<double, olc::Pixel>& p1, std::pair<double, olc::Pixel>& p2)
-					{
-						return p2.first > p1.first;
-					});
+						  [](const std::pair<double, olc::Pixel> &p1, std::pair<double, olc::Pixel> &p2)
+						  {
+							  return p2.first > p1.first;
+						  });
 			}
 
 			ReconstructIndex();

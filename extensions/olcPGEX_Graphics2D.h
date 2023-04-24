@@ -56,7 +56,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2019
+	David Barr, aka javidx9, ï¿½OneLoneCoder 2019
 */
 
 /*
@@ -66,8 +66,6 @@
 	|C0R1 C1R1 C2R1| * | y | = | y'|
 	|C0R2 C1R2 C2R2|   |1.0|   | - |
 */
-
-
 
 #ifndef OLC_PGEX_GFX2D
 #define OLC_PGEX_GFX2D
@@ -86,30 +84,30 @@ namespace olc
 		class Transform2D
 		{
 		public:
-			 Transform2D();
+			Transform2D();
 
 		public:
 			// Set this transformation to unity
-			 void Reset();
+			void Reset();
 			// Append a rotation of fTheta radians to this transform
-			 void Rotate(float fTheta);
+			void Rotate(float fTheta);
 			// Append a translation (ox, oy) to this transform
-			 void Translate(float ox, float oy);
+			void Translate(float ox, float oy);
 			// Append a scaling operation (sx, sy) to this transform
-			 void Scale(float sx, float sy);
+			void Scale(float sx, float sy);
 			// Append a shear operation (sx, sy) to this transform
-			 void Shear(float sx, float sy);
+			void Shear(float sx, float sy);
 
-			 void Perspective(float ox, float oy);
+			void Perspective(float ox, float oy);
 			// Calculate the Forward Transformation of the coordinate (in_x, in_y) -> (out_x, out_y)
-			 void Forward(float in_x, float in_y, float &out_x, float &out_y);
+			void Forward(float in_x, float in_y, float &out_x, float &out_y);
 			// Calculate the Inverse Transformation of the coordinate (in_x, in_y) -> (out_x, out_y)
-			 void Backward(float in_x, float in_y, float &out_x, float &out_y);
+			void Backward(float in_x, float in_y, float &out_x, float &out_y);
 			// Regenerate the Inverse Transformation
-			 void Invert();
+			void Invert();
 
 		private:
-			 void Multiply();
+			void Multiply();
 			float matrix[4][3][3];
 			int nTargetMatrix;
 			int nSourceMatrix;
@@ -118,10 +116,9 @@ namespace olc
 
 	public:
 		// Draws a sprite with the transform applied
-		 static void DrawSprite(olc::Sprite *sprite, olc::GFX2D::Transform2D &transform);
+		static void DrawSprite(olc::Sprite *sprite, olc::GFX2D::Transform2D &transform);
 	};
 }
-
 
 #ifdef OLC_PGEX_GRAPHICS2D
 #undef OLC_PGEX_GRAPHICS2D
@@ -135,32 +132,41 @@ namespace olc
 
 		// Work out bounding rectangle of sprite
 		float ex, ey;
-		float sx, sy;		
+		float sx, sy;
 		float px, py;
 
 		transform.Forward(0.0f, 0.0f, sx, sy);
-		px = sx; py = sy;
-		sx = std::min(sx, px); sy = std::min(sy, py);
-		ex = std::max(ex, px); ey = std::max(ey, py);
-		
+		px = sx;
+		py = sy;
+		sx = std::min(sx, px);
+		sy = std::min(sy, py);
+		ex = std::max(ex, px);
+		ey = std::max(ey, py);
+
 		transform.Forward((float)sprite->width, (float)sprite->height, px, py);
-		sx = std::min(sx, px); sy = std::min(sy, py);
-		ex = std::max(ex, px); ey = std::max(ey, py);
+		sx = std::min(sx, px);
+		sy = std::min(sy, py);
+		ex = std::max(ex, px);
+		ey = std::max(ey, py);
 
 		transform.Forward(0.0f, (float)sprite->height, px, py);
-		sx = std::min(sx, px); sy = std::min(sy, py);
-		ex = std::max(ex, px); ey = std::max(ey, py);
+		sx = std::min(sx, px);
+		sy = std::min(sy, py);
+		ex = std::max(ex, px);
+		ey = std::max(ey, py);
 
 		transform.Forward((float)sprite->width, 0.0f, px, py);
-		sx = std::min(sx, px); sy = std::min(sy, py);
-		ex = std::max(ex, px); ey = std::max(ey, py);
+		sx = std::min(sx, px);
+		sy = std::min(sy, py);
+		ex = std::max(ex, px);
+		ey = std::max(ey, py);
 
 		// Perform inversion of transform if required
 		transform.Invert();
 
-		if (ex < sx) 
+		if (ex < sx)
 			std::swap(ex, sx);
-		if (ey < sy) 
+		if (ey < sy)
 			std::swap(ey, sy);
 
 		// Iterate through render space, and sample Sprite from suitable texel location
@@ -170,7 +176,7 @@ namespace olc
 			{
 				float ox, oy;
 				transform.Backward(i, j, ox, oy);
-				pge->Draw((int32_t)i, (int32_t)j, sprite->GetPixel((int32_t)(ox+0.5f), (int32_t)(oy+0.5f)));
+				pge->Draw((int32_t)i, (int32_t)j, sprite->GetPixel((int32_t)(ox + 0.5f), (int32_t)(oy + 0.5f)));
 			}
 		}
 	}
@@ -189,13 +195,25 @@ namespace olc
 		// Columns Then Rows
 
 		// Matrices 0 & 1 are used as swaps in Transform accumulation
-		matrix[0][0][0] = 1.0f; matrix[0][1][0] = 0.0f; matrix[0][2][0] = 0.0f;
-		matrix[0][0][1] = 0.0f; matrix[0][1][1] = 1.0f; matrix[0][2][1] = 0.0f;
-		matrix[0][0][2] = 0.0f; matrix[0][1][2] = 0.0f; matrix[0][2][2] = 1.0f;
+		matrix[0][0][0] = 1.0f;
+		matrix[0][1][0] = 0.0f;
+		matrix[0][2][0] = 0.0f;
+		matrix[0][0][1] = 0.0f;
+		matrix[0][1][1] = 1.0f;
+		matrix[0][2][1] = 0.0f;
+		matrix[0][0][2] = 0.0f;
+		matrix[0][1][2] = 0.0f;
+		matrix[0][2][2] = 1.0f;
 
-		matrix[1][0][0] = 1.0f; matrix[1][1][0] = 0.0f; matrix[1][2][0] = 0.0f;
-		matrix[1][0][1] = 0.0f; matrix[1][1][1] = 1.0f; matrix[1][2][1] = 0.0f;
-		matrix[1][0][2] = 0.0f; matrix[1][1][2] = 0.0f; matrix[1][2][2] = 1.0f;
+		matrix[1][0][0] = 1.0f;
+		matrix[1][1][0] = 0.0f;
+		matrix[1][2][0] = 0.0f;
+		matrix[1][0][1] = 0.0f;
+		matrix[1][1][1] = 1.0f;
+		matrix[1][2][1] = 0.0f;
+		matrix[1][0][2] = 0.0f;
+		matrix[1][1][2] = 0.0f;
+		matrix[1][2][2] = 1.0f;
 
 		// Matrix 2 is a cache matrix to hold the immediate transform operation
 		// Matrix 3 is a cache matrix to hold the inverted transform
@@ -218,47 +236,77 @@ namespace olc
 	}
 
 	void olc::GFX2D::Transform2D::Rotate(float fTheta)
-	{		
+	{
 		// Construct Rotation Matrix
-		matrix[2][0][0] = cosf(fTheta);  matrix[2][1][0] = sinf(fTheta); matrix[2][2][0] = 0.0f;
-		matrix[2][0][1] = -sinf(fTheta); matrix[2][1][1] = cosf(fTheta); matrix[2][2][1] = 0.0f;
-		matrix[2][0][2] = 0.0f;			 matrix[2][1][2] = 0.0f;		 matrix[2][2][2] = 1.0f;
-		Multiply();		
+		matrix[2][0][0] = cosf(fTheta);
+		matrix[2][1][0] = sinf(fTheta);
+		matrix[2][2][0] = 0.0f;
+		matrix[2][0][1] = -sinf(fTheta);
+		matrix[2][1][1] = cosf(fTheta);
+		matrix[2][2][1] = 0.0f;
+		matrix[2][0][2] = 0.0f;
+		matrix[2][1][2] = 0.0f;
+		matrix[2][2][2] = 1.0f;
+		Multiply();
 	}
 
 	void olc::GFX2D::Transform2D::Scale(float sx, float sy)
 	{
 		// Construct Scale Matrix
-		matrix[2][0][0] = sx;   matrix[2][1][0] = 0.0f; matrix[2][2][0] = 0.0f;
-		matrix[2][0][1] = 0.0f; matrix[2][1][1] = sy;   matrix[2][2][1] = 0.0f;
-		matrix[2][0][2] = 0.0f;	matrix[2][1][2] = 0.0f;	matrix[2][2][2] = 1.0f;
+		matrix[2][0][0] = sx;
+		matrix[2][1][0] = 0.0f;
+		matrix[2][2][0] = 0.0f;
+		matrix[2][0][1] = 0.0f;
+		matrix[2][1][1] = sy;
+		matrix[2][2][1] = 0.0f;
+		matrix[2][0][2] = 0.0f;
+		matrix[2][1][2] = 0.0f;
+		matrix[2][2][2] = 1.0f;
 		Multiply();
 	}
 
 	void olc::GFX2D::Transform2D::Shear(float sx, float sy)
 	{
-		// Construct Shear Matrix		
-		matrix[2][0][0] = 1.0f; matrix[2][1][0] = sx;   matrix[2][2][0] = 0.0f;
-		matrix[2][0][1] = sy;   matrix[2][1][1] = 1.0f; matrix[2][2][1] = 0.0f;
-		matrix[2][0][2] = 0.0f;	matrix[2][1][2] = 0.0f;	matrix[2][2][2] = 1.0f;
+		// Construct Shear Matrix
+		matrix[2][0][0] = 1.0f;
+		matrix[2][1][0] = sx;
+		matrix[2][2][0] = 0.0f;
+		matrix[2][0][1] = sy;
+		matrix[2][1][1] = 1.0f;
+		matrix[2][2][1] = 0.0f;
+		matrix[2][0][2] = 0.0f;
+		matrix[2][1][2] = 0.0f;
+		matrix[2][2][2] = 1.0f;
 		Multiply();
 	}
 
 	void olc::GFX2D::Transform2D::Translate(float ox, float oy)
 	{
 		// Construct Translate Matrix
-		matrix[2][0][0] = 1.0f; matrix[2][1][0] = 0.0f; matrix[2][2][0] = ox;
-		matrix[2][0][1] = 0.0f; matrix[2][1][1] = 1.0f; matrix[2][2][1] = oy;
-		matrix[2][0][2] = 0.0f;	matrix[2][1][2] = 0.0f;	matrix[2][2][2] = 1.0f;
+		matrix[2][0][0] = 1.0f;
+		matrix[2][1][0] = 0.0f;
+		matrix[2][2][0] = ox;
+		matrix[2][0][1] = 0.0f;
+		matrix[2][1][1] = 1.0f;
+		matrix[2][2][1] = oy;
+		matrix[2][0][2] = 0.0f;
+		matrix[2][1][2] = 0.0f;
+		matrix[2][2][2] = 1.0f;
 		Multiply();
 	}
 
 	void olc::GFX2D::Transform2D::Perspective(float ox, float oy)
 	{
 		// Construct Translate Matrix
-		matrix[2][0][0] = 1.0f; matrix[2][1][0] = 0.0f; matrix[2][2][0] = 0.0f;
-		matrix[2][0][1] = 0.0f; matrix[2][1][1] = 1.0f; matrix[2][2][1] = 0.0f;
-		matrix[2][0][2] = ox;	matrix[2][1][2] = oy;	matrix[2][2][2] = 1.0f;
+		matrix[2][0][0] = 1.0f;
+		matrix[2][1][0] = 0.0f;
+		matrix[2][2][0] = 0.0f;
+		matrix[2][0][1] = 0.0f;
+		matrix[2][1][1] = 1.0f;
+		matrix[2][2][1] = 0.0f;
+		matrix[2][0][2] = ox;
+		matrix[2][1][2] = oy;
+		matrix[2][2][2] = 1.0f;
 		Multiply();
 	}
 
@@ -272,7 +320,7 @@ namespace olc
 			out_x /= out_z;
 			out_y /= out_z;
 		}
-	} 
+	}
 
 	void olc::GFX2D::Transform2D::Backward(float in_x, float in_y, float &out_x, float &out_y)
 	{
@@ -289,10 +337,10 @@ namespace olc
 	void olc::GFX2D::Transform2D::Invert()
 	{
 		if (bDirty) // Obviously costly so only do if needed
-		{			
+		{
 			float det = matrix[nSourceMatrix][0][0] * (matrix[nSourceMatrix][1][1] * matrix[nSourceMatrix][2][2] - matrix[nSourceMatrix][1][2] * matrix[nSourceMatrix][2][1]) -
-				        matrix[nSourceMatrix][1][0] * (matrix[nSourceMatrix][0][1] * matrix[nSourceMatrix][2][2] - matrix[nSourceMatrix][2][1] * matrix[nSourceMatrix][0][2]) +
-				        matrix[nSourceMatrix][2][0] * (matrix[nSourceMatrix][0][1] * matrix[nSourceMatrix][1][2] - matrix[nSourceMatrix][1][1] * matrix[nSourceMatrix][0][2]);
+						matrix[nSourceMatrix][1][0] * (matrix[nSourceMatrix][0][1] * matrix[nSourceMatrix][2][2] - matrix[nSourceMatrix][2][1] * matrix[nSourceMatrix][0][2]) +
+						matrix[nSourceMatrix][2][0] * (matrix[nSourceMatrix][0][1] * matrix[nSourceMatrix][1][2] - matrix[nSourceMatrix][1][1] * matrix[nSourceMatrix][0][2]);
 
 			float idet = 1.0f / det;
 			matrix[3][0][0] = (matrix[nSourceMatrix][1][1] * matrix[nSourceMatrix][2][2] - matrix[nSourceMatrix][1][2] * matrix[nSourceMatrix][2][1]) * idet;
@@ -305,7 +353,7 @@ namespace olc
 			matrix[3][1][2] = (matrix[nSourceMatrix][0][2] * matrix[nSourceMatrix][1][0] - matrix[nSourceMatrix][0][0] * matrix[nSourceMatrix][1][2]) * idet;
 			matrix[3][2][2] = (matrix[nSourceMatrix][0][0] * matrix[nSourceMatrix][1][1] - matrix[nSourceMatrix][0][1] * matrix[nSourceMatrix][1][0]) * idet;
 			bDirty = false;
-		}				
+		}
 	}
 }
 
