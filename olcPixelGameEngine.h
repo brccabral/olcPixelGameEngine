@@ -4507,6 +4507,8 @@ namespace olc
 
 		m_tp1 = std::chrono::system_clock::now();
 		m_tp2 = std::chrono::system_clock::now();
+
+		std::srand((unsigned int)time(0));
 	}
 
 	void PixelGameEngine::olc_CoreUpdate()
