@@ -6,5 +6,7 @@
 /utilities/olcUTIL_AffineView.h
 /utilities/olcUTIL_Maths.h
 build_dir/
+build_win/
 install_dir/
+install_win/
 .vscode/
