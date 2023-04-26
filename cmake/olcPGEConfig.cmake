@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 add_definitions(-DOLC_PGE_APPLICATION)
 add_definitions(-DOLC_PGEX_GRAPHICS2D)
+add_definitions(-DOLC_PGEX_GRAPHICS3D)
 
 set(olcPGE_PREFIX       "${CMAKE_CURRENT_LIST_DIR}")
 set(olcPGE_INCLUDE_DIR  "${olcPGE_PREFIX}/..")
