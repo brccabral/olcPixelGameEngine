@@ -107,6 +107,7 @@ namespace olc
 			vec3d p[3];
 			vec2d t[3];
 			olc::Pixel col[3];
+			// olc::Pixel col[3] = {olc::WHITE, olc::WHITE, olc::WHITE};
 		};
 
 		struct mat4x4
@@ -1587,10 +1588,14 @@ namespace olc
 						if (spr != nullptr)
 						{
 							olc::Pixel sample = spr->Sample(tex_u / tex_w, tex_v / tex_w);
-							pixel_r = sample.r;
-							pixel_g = sample.g;
-							pixel_b = sample.b;
-							pixel_a = sample.a;
+							// pixel_r = sample.r;
+							// pixel_g = sample.g;
+							// pixel_b = sample.b;
+							// pixel_a = sample.a;
+							pixel_r *= sample.r / 255.0f;
+							pixel_g *= sample.g / 255.0f;
+							pixel_b *= sample.b / 255.0f;
+							pixel_a *= sample.a / 255.0f;
 						}
 					}
 
@@ -1715,10 +1720,14 @@ namespace olc
 						if (spr != nullptr)
 						{
 							olc::Pixel sample = spr->Sample(tex_u / tex_w, tex_v / tex_w);
-							pixel_r = sample.r;
-							pixel_g = sample.g;
-							pixel_b = sample.b;
-							pixel_a = sample.a;
+							// pixel_r = sample.r;
+							// pixel_g = sample.g;
+							// pixel_b = sample.b;
+							// pixel_a = sample.a;
+							pixel_r *= sample.r / 255.0f;
+							pixel_g *= sample.g / 255.0f;
+							pixel_b *= sample.b / 255.0f;
+							pixel_a *= sample.a / 255.0f;
 						}
 					}
 
