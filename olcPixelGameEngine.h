@@ -400,6 +400,8 @@ int main()
 
 #define PGE_VER 224
 
+const double PI = 2.0 * acos(0.0);
+
 // O------------------------------------------------------------------------------O
 // | COMPILER CONFIGURATION ODDITIES                                              |
 // O------------------------------------------------------------------------------O
@@ -1608,8 +1610,6 @@ namespace olc
 // | Note: The core implementation is platform independent                        |
 // O------------------------------------------------------------------------------O
 #pragma region pge_implementation
-
-const double PI = 2.0 * acos(0.0);
 namespace olc
 {
 	// O------------------------------------------------------------------------------O
