@@ -167,6 +167,8 @@ namespace olc
 		static void StopAll();
 		static float GetMixerOutput(int nChannel, float fGlobalTime, float fTimeStep);
 
+		static float GetTime();
+
 	private:
 #ifdef USE_WINDOWS // Windows specific sound management
 		static void CALLBACK waveOutProc(HWAVEOUT hWaveOut, UINT uMsg, DWORD dwParam1, DWORD dwParam2);
@@ -426,6 +428,11 @@ namespace olc
 			return funcUserFilter(nChannel, fGlobalTime, fMixerSample);
 		else
 			return fMixerSample;
+	}
+
+	float SOUND::GetTime()
+	{
+		return m_fGlobalTime;
 	}
 
 	std::thread SOUND::m_AudioThread;
