@@ -6,9 +6,9 @@ set(olcPGE_INCLUDE_DIR  "${olcPGE_PREFIX}/..")
 include_directories(${olcPGE_INCLUDE_DIR})
 
 if(WIN32)
-    add_compile_options(/std:c++17)
+    add_compile_options(/std:c++20)
 else()
-    add_compile_options(-std=c++17)
+    add_compile_options(-std=c++20)
     link_libraries(png GL X11 pthread stdc++fs)
 endif()
 
