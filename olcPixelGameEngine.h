@@ -456,16 +456,13 @@ namespace _gfs = std::filesystem;
 // Platform
 #if !defined(OLC_PLATFORM_WINAPI) && !defined(OLC_PLATFORM_X11) && !defined(OLC_PLATFORM_GLUT) && !defined(OLC_PLATFORM_EMSCRIPTEN) && !defined(OLC_PLATFORM_HEADLESS)
 #if !defined(OLC_PLATFORM_CUSTOM_EX)
-#if defined(_WIN32)
-#define OLC_PLATFORM_WINAPI
-#endif
 #if defined(__EMSCRIPTEN__)
 #define OLC_PLATFORM_EMSCRIPTEN
-#endif
-#if (defined(__linux__) || defined(__FreeBSD__)) && !defined(OLC_PLATFORM_EMSCRIPTEN)
+#elif defined(_WIN32)
+#define OLC_PLATFORM_WINAPI
+#elif defined(__linux__) || defined(__FreeBSD__)
 #define OLC_PLATFORM_X11
-#endif
-#if defined(__APPLE__)
+#elif defined(__APPLE__)
 #define GL_SILENCE_DEPRECATION
 #define OLC_PLATFORM_GLUT
 #endif
