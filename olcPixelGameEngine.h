@@ -459,15 +459,15 @@ namespace _gfs = std::filesystem;
 #if defined(_WIN32)
 #define OLC_PLATFORM_WINAPI
 #endif
-#if defined(__linux__) || defined(__FreeBSD__)
+#if defined(__EMSCRIPTEN__)
+#define OLC_PLATFORM_EMSCRIPTEN
+#endif
+#if (defined(__linux__) || defined(__FreeBSD__)) && !defined(OLC_PLATFORM_EMSCRIPTEN)
 #define OLC_PLATFORM_X11
 #endif
 #if defined(__APPLE__)
 #define GL_SILENCE_DEPRECATION
 #define OLC_PLATFORM_GLUT
-#endif
-#if defined(__EMSCRIPTEN__)
-#define OLC_PLATFORM_EMSCRIPTEN
 #endif
 #endif
 #endif
@@ -7543,7 +7543,7 @@ namespace olc
                 // set up resize observer and fullscreenchange event handler
                 var olc_Init = function()
                 {
-                    if (Module.olc_AspectRatio == = undefined)
+                    if (Module.olc_AspectRatio === undefined)
                     {
                         setTimeout(
                             function() { Module.olc_Init(); }, 50);
