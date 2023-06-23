@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.21.2)
 
 set(olcPGE_PREFIX       "${CMAKE_CURRENT_LIST_DIR}")
 set(olcPGE_INCLUDE_DIR  "${olcPGE_PREFIX}/..")
@@ -7,6 +7,8 @@ include_directories(${olcPGE_INCLUDE_DIR})
 
 if(WIN32)
     add_compile_options(/std:c++20)
+elseif(EMSCRIPTEN)
+    link_libraries(-std=c++17 -sALLOW_MEMORY_GROWTH=1 -sMAX_WEBGL_VERSION=2 -sMIN_WEBGL_VERSION=2 -sUSE_LIBPNG=1)
 else()
     add_compile_options(-std=c++20)
     link_libraries(png GL X11 pthread stdc++fs)
