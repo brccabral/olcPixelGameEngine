@@ -7,6 +7,9 @@ include_directories(${olcPGE_INCLUDE_DIR})
 
 if(WIN32)
     add_compile_options(/std:c++20)
+    # MinGW
+    # add_compile_options(-std=c++20)
+    # link_libraries(opengl32 glu32 gdiplus dwmapi d3d11 dxgi d3dcompiler winmm dxguid shlwapi)
 elseif(EMSCRIPTEN)
     link_libraries(-std=c++17 -sALLOW_MEMORY_GROWTH=1 -sMAX_WEBGL_VERSION=2 -sMIN_WEBGL_VERSION=2 -sUSE_LIBPNG=1)
 else()
