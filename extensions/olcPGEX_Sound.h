@@ -83,15 +83,12 @@
 
 // Choose a default sound backend
 #if !defined(USE_ALSA) && !defined(USE_OPENAL) && !defined(USE_WINDOWS)
-#ifdef __linux__
-#define USE_ALSA
-#endif
 
 #ifdef __EMSCRIPTEN__
 #define USE_OPENAL
-#endif
-
-#ifdef _WIN32
+#elif defined(__linux__)
+#define USE_ALSA
+#elif defined(_WIN32)
 #define USE_WINDOWS
 #endif
 
