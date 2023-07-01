@@ -765,8 +765,8 @@ namespace olc
     template <class T>
     struct v2d_generic
     {
-        T x = 0;
-        T y = 0;
+        T x = T(0);
+        T y = T(0);
         v2d_generic() : x(0), y(0) {}
         v2d_generic(T _x, T _y) : x(_x), y(_y) {}
         v2d_generic(const v2d_generic &v) : x(v.x), y(v.y) {}
