@@ -1463,7 +1463,7 @@ namespace olc
 
         // At the very end of this file, chooses which
         // components to compile
-        virtual void olc_ConfigureSystem();
+        void olc_ConfigureSystem();
 
         // NOTE: Items Here are to be deprecated, I have left them in for now
         // in case you are using them, but they will be removed.
@@ -5176,7 +5176,7 @@ namespace olc
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
 
-        void SetDecalMode(const olc::DecalMode &mode)
+        void SetDecalMode(const olc::DecalMode &mode) override
         {
             if (mode != nDecalMode)
             {
