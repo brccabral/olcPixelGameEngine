@@ -10,3 +10,5 @@ build_win/
 install_dir/
 install_win/
 .vscode/
+.kev4/
+*.kdev4
