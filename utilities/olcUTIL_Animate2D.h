@@ -48,7 +48,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ï¿½OneLoneCoder 2019, 2020, 2021, 2022, 2023, 2024
+	David Barr, aka javidx9, ©OneLoneCoder 2019, 2020, 2021, 2022, 2023, 2024
 
 
 	Versions
@@ -68,42 +68,42 @@ namespace olc::utils::Animate2D
 	// any location withing that image source. Once it's constructed, it's advised not to change it, as
 	// this likely indicates a usage bug.
 	//
-	// "Sourceless" frames are valid too - this is useful if you have a particular animation set, but
+	// "Sourceless" frames are valid too - this is useful if you have a particular animation set, but 
 	// want to apply it to a variety of sources, for example sprite maps with common layouts.
 	class Frame
 	{
 	public:
-		inline Frame(const olc::Renderable *gfxSource, const geom2d::rect<int32_t> &rectSource = {{0, 0}, {0, 0}})
+		inline Frame(const olc::Renderable* gfxSource, const geom2d::rect<int32_t>& rectSource = { {0,0},{0,0} })
 			: gfxImageSource(gfxSource), rectFrameSource(rectSource)
 		{
-			// If no source rectangle specified then use whole image source. Ignore in the event
+			// If no source rectangle specified then use whole image source. Ignore in the event 
 			// that a frame is set up as source-less
-			if (gfxSource && rectFrameSource.size.x == 0)
+			if(gfxSource && rectFrameSource.size.x == 0)
 				rectFrameSource.size = gfxSource->Sprite()->Size();
 		}
 
-		inline const olc::Renderable *GetSourceImage() const
+		inline const olc::Renderable* GetSourceImage() const
 		{
 			return gfxImageSource;
 		}
 
-		inline const geom2d::rect<int32_t> &GetSourceRect() const
+		inline const geom2d::rect<int32_t>& GetSourceRect() const
 		{
 			return rectFrameSource;
 		}
 
 	private:
-		const olc::Renderable *gfxImageSource;
+		const olc::Renderable* gfxImageSource;
 		geom2d::rect<int32_t> rectFrameSource;
 	};
 
 	// Animation styles decide how the frames should be traversed in time
 	enum class Style : uint8_t
 	{
-		Repeat,	  // Cycle through, go back to beginning
-		OneShot,  // Play once and suspend on final frame
-		PingPong, // Traverse through forwards, then backwards
-		Reverse,  // Cycle through sequence backwards
+		Repeat,		// Cycle through, go back to beginning
+		OneShot,	// Play once and suspend on final frame
+		PingPong,   // Traverse through forwards, then backwards
+		Reverse,    // Cycle through sequence backwards
 	};
 
 	class FrameSequence
@@ -118,17 +118,17 @@ namespace olc::utils::Animate2D
 		}
 
 		// Adds a frame to this sequence
-		inline void AddFrame(const Frame &frame)
+		inline void AddFrame(const Frame& frame)
 		{
 			m_vFrames.emplace_back(frame);
 		}
 
 		// Returns a Frame Object for a given time into an animation
-		inline const Frame &GetFrame(const float fTime) const
+		inline const Frame& GetFrame(const float fTime) const
 		{
 			return m_vFrames[ConvertTimeToFrame(fTime)];
 		}
-
+		
 	private:
 		Style m_nStyle;
 		std::vector<Frame> m_vFrames;
@@ -167,20 +167,20 @@ namespace olc::utils::Animate2D
 	{
 	private:
 		size_t nIndex = 0;
-		float fTime = 0.0f;
-		template <typename StatesEnum>
+		float fTime = 0.0f;		
+		template<typename StatesEnum>
 		friend class Animation;
 	};
 
 	// Animation object holds a group of frame sequences and can mutate an AnimationState token
-	template <typename StatesEnum>
+	template<typename StatesEnum>
 	class Animation
 	{
 	public:
 		Animation() = default;
-
+		
 		// Change an animation state token to a new state
-		inline bool ChangeState(AnimationState &state, const StatesEnum &sStateName) const
+		inline bool ChangeState(AnimationState& state, const StatesEnum& sStateName) const
 		{
 			size_t idx = m_mapStateIndices.at(sStateName);
 			if (state.nIndex != idx)
@@ -194,21 +194,21 @@ namespace olc::utils::Animate2D
 		}
 
 		// Update an animation state token
-		inline void UpdateState(AnimationState &state, const float fElapsedTime) const
+		inline void UpdateState(AnimationState& state, const float fElapsedTime) const
 		{
 			state.fTime += fElapsedTime;
 		}
 
 	public:
 		// Retrieve the frame information for a given animation state
-		inline const Frame &GetFrame(const AnimationState &state) const
+		inline const Frame& GetFrame(const AnimationState& state) const
 		{
 			return m_vSequences[state.nIndex].GetFrame(state.fTime);
 		}
 
 	public:
 		// Add a named Frame sequence as a state
-		inline void AddState(const StatesEnum &sStateName, const FrameSequence &sequence)
+		inline void AddState(const StatesEnum& sStateName, const FrameSequence& sequence)
 		{
 			m_vSequences.emplace_back(sequence);
 			m_mapStateIndices[sStateName] = m_vSequences.size() - 1;

@@ -48,7 +48,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ï¿½OneLoneCoder 2019, 2020, 2021, 2022
+	David Barr, aka javidx9, ©OneLoneCoder 2019, 2020, 2021, 2022
 
 */
 
@@ -72,17 +72,17 @@
 
 namespace olc::utils::Container
 {
-	template <typename T>
+	template<typename T>
 	class SingleSelection : public std::vector<T>
 	{
 	public:
-		SingleSelection() : std::vector<T>()
-		{
-		}
+
+		SingleSelection() : std::vector<T>() 
+		{}
+		
 
 		SingleSelection(std::initializer_list<T> list) : std::vector<T>(list)
-		{
-		}
+		{}
 
 		// Returns selected item in container
 		size_t selection() const
@@ -91,13 +91,13 @@ namespace olc::utils::Container
 		}
 
 		// Return the item actually selected
-		const T &selected() const
+		const T& selected() const
 		{
 			return this->operator[](m_nSelectedItem);
 		}
 
 		// Return the item actually selected
-		T &selected()
+		T& selected()
 		{
 			return this->operator[](m_nSelectedItem);
 		}
@@ -111,14 +111,14 @@ namespace olc::utils::Container
 		// Move selected item positively
 		void move_up()
 		{
-			if (move_up(m_nSelectedItem))
+			if(move_up(m_nSelectedItem))
 				m_nSelectedItem++;
 		}
 
 		// Move selected item negatively
 		void move_down()
 		{
-			if (move_down(m_nSelectedItem))
+			if(move_down(m_nSelectedItem))
 				m_nSelectedItem--;
 		}
 
@@ -146,10 +146,11 @@ namespace olc::utils::Container
 			return false;
 		}
 
-		void insert_after(const size_t idx, const T &value)
+		void insert_after(const size_t idx, const T& value)
 		{
 			this->insert(idx, value);
 		}
+
 
 	protected:
 		size_t m_nSelectedItem = 0;
