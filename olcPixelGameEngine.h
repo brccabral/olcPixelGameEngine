@@ -454,6 +454,9 @@ namespace _gfs = std::filesystem;
 // Platform
 #if !defined(OLC_PLATFORM_WINAPI) && !defined(OLC_PLATFORM_X11) && !defined(OLC_PLATFORM_GLUT) && !defined(OLC_PLATFORM_EMSCRIPTEN) && !defined(OLC_PLATFORM_HEADLESS)
 #if !defined(OLC_PLATFORM_CUSTOM_EX)
+#if defined(__EMSCRIPTEN__)
+#define OLC_PLATFORM_EMSCRIPTEN
+#else
 #if defined(_WIN32)
 #define OLC_PLATFORM_WINAPI
 #endif
@@ -464,8 +467,6 @@ namespace _gfs = std::filesystem;
 #define GL_SILENCE_DEPRECATION
 #define OLC_PLATFORM_GLUT
 #endif
-#if defined(__EMSCRIPTEN__)
-#define OLC_PLATFORM_EMSCRIPTEN
 #endif
 #endif
 #endif
