@@ -73,10 +73,9 @@ namespace olc::utils
         inline Camera2D() : m_pTarget(&m_vLocalTarget) {}
 
         // Construct a camera with a viewable area size, and an optional starting position
-        inline Camera2D(const olc::vf2d &vViewSize, const olc::vf2d &vViewPos = {0.0f, 0.0f}) : m_pTarget(&m_vLocalTarget)
+        inline Camera2D(const olc::vf2d &vViewSize, const olc::vf2d &vViewPos = {0.0f, 0.0f})
+            : m_pTarget(&m_vLocalTarget), m_vViewSize(vViewSize), m_vViewPos(vViewPos)
         {
-            m_vViewSize = vViewSize;
-            m_vViewPos = vViewPos;
         }
 
         // Set the operational mode of this camera

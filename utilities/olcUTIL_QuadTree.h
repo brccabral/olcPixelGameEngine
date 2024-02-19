@@ -88,9 +88,10 @@ namespace olc::utils
     {
     public:
         DynamicQuadTree(const geom2d::rect<CTYPE> &size, const size_t nDepth = 0, const size_t nMaxDepth = 8)
+            : m_rect(size)
         {
             m_depth = nDepth;
-            m_rect = size;
+
             m_maxdepth = nMaxDepth;
             resize(m_rect);
         }

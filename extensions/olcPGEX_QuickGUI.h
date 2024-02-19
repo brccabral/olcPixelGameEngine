@@ -339,6 +339,8 @@ namespace olc::QuickGUI
                 const olc::vf2d &pos,   // Location of list top-left
                 const olc::vf2d &size); // Size of list
 
+        ListBox(ListBox &L) = default;
+
         // Position of list
         olc::vf2d vPos;
         // Size of list
@@ -468,11 +470,11 @@ namespace olc::QuickGUI
 
 #pragma region Label
     Label::Label(olc::QuickGUI::Manager &manager, const std::string &text, const olc::vf2d &pos, const olc::vf2d &size)
-        : BaseControl(manager)
+        : BaseControl(manager),
+          vPos(pos),
+          vSize(size),
+          sText(text)
     {
-        vPos = pos;
-        vSize = size;
-        sText = text;
     }
 
     void Label::Update(olc::PixelGameEngine *pge)
@@ -658,11 +660,11 @@ namespace olc::QuickGUI
 
 #pragma region Button
     Button::Button(olc::QuickGUI::Manager &manager, const std::string &text, const olc::vf2d &pos, const olc::vf2d &size)
-        : BaseControl(manager)
+        : BaseControl(manager),
+          vPos(pos),
+          vSize(size),
+          sText(text)
     {
-        vPos = pos;
-        vSize = size;
-        sText = text;
     }
 
     void Button::Update(olc::PixelGameEngine *pge)
@@ -874,10 +876,10 @@ namespace olc::QuickGUI
 
 #pragma region Slider
     Slider::Slider(olc::QuickGUI::Manager &manager, const olc::vf2d &posmin, const olc::vf2d &posmax, const float valmin, const float valmax, const float value)
-        : BaseControl(manager)
+        : BaseControl(manager),
+          vPosMin(posmin),
+          vPosMax(posmax)
     {
-        vPosMin = posmin;
-        vPosMax = posmax;
         fMin = valmin;
         fMax = valmax;
         fValue = value;

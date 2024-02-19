@@ -132,7 +132,7 @@ namespace olc::utils
                         {3.0 / 6.0, olc::CYAN},
                         {4.0 / 6.0, olc::BLUE},
                         {5.0 / 6.0, olc::MAGENTA},
-                        {6.0 / 6.0, olc::RED}};
+                        {1.0, olc::RED}};
                 break;
             }
 

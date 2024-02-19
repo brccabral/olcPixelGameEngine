@@ -77,6 +77,8 @@
 
 #include <unordered_map>
 #include <algorithm>
+#include <cstdint>
+#include "olcPixelGameEngine.h"
 
 namespace olc
 {
@@ -257,7 +259,7 @@ void olc::rcw::Engine::SetCamera(const olc::vf2d &pos, const float heading)
 void olc::rcw::Engine::Update(float fElapsedTime)
 {
     // Update the position and statically resolve for collisions against the map
-    for (auto &ob : mapObjects)
+    for (const auto &ob : mapObjects)
     {
         std::shared_ptr<olc::rcw::Object> object = ob.second;
         if (!object->bIsActive)
@@ -609,7 +611,9 @@ void olc::rcw::Engine::HandleObjectVsObject(std::shared_ptr<olc::rcw::Object> ob
 // Will be explained in upcoming video...
 bool olc::rcw::Engine::CastRayDDA(const olc::vf2d &vOrigin, const olc::vf2d &vDirection, sTileHit &hit)
 {
-    olc::vf2d vRayDelta = {sqrt(1 + (vDirection.y / vDirection.x) * (vDirection.y / vDirection.x)), sqrt(1 + (vDirection.x / vDirection.y) * (vDirection.x / vDirection.y))};
+    olc::vf2d vRayDelta = {
+        sqrtf(1 + (vDirection.y / vDirection.x) * (vDirection.y / vDirection.x)), 
+        sqrtf(1 + (vDirection.x / vDirection.y) * (vDirection.x / vDirection.y))};
 
     olc::vi2d vMapCheck = vOrigin;
     olc::vf2d vSideDistance;

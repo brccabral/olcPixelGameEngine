@@ -75,6 +75,7 @@
 #include <cstdint>
 #undef min
 #undef max
+#include "olcPixelGameEngine.h"
 
 // #include <omp.h>
 
@@ -198,10 +199,10 @@ namespace olc
         public:
             void SetProjection(float fFovDegrees, float fAspectRatio, float fNear, float fFar, float fLeft, float fTop, float fWidth, float fHeight);
             void SetCamera(olc::GFX3D::vec3d &pos, olc::GFX3D::vec3d &lookat, olc::GFX3D::vec3d &up);
-            void SetTransform(olc::GFX3D::mat4x4 &transform);
+            void SetTransform(const olc::GFX3D::mat4x4 &transform);
             void SetTexture(olc::Sprite *texture);
             // void SetMipMapTexture(olc::GFX3D::MipMap *texture);
-            void SetLightSource(uint32_t nSlot, uint32_t nType, olc::Pixel col, olc::GFX3D::vec3d pos, olc::GFX3D::vec3d dir = {0.0f, 0.0f, 1.0f}, float fParam = 0.0f);
+            void SetLightSource(uint32_t nSlot, uint32_t nType, olc::Pixel col, olc::GFX3D::vec3d pos, olc::GFX3D::vec3d dir = {0.0f, 0.0f, 1.0f, 1.0f}, float fParam = 0.0f);
             uint32_t Render(std::vector<olc::GFX3D::triangle> &triangles, uint32_t flags = RENDER_CULL_CW | RENDER_TEXTURED | RENDER_DEPTH);
             uint32_t Render(std::vector<olc::GFX3D::triangle> &triangles, uint32_t flags, int nOffset, int nCount);
             uint32_t RenderLine(olc::GFX3D::vec3d &p1, olc::GFX3D::vec3d &p2, olc::Pixel col = olc::WHITE);
@@ -745,23 +746,20 @@ namespace olc
               dw1_step = 0, dw2_step = 0;
 
         if (dy1)
+        {
             dax_step = dx1 / (float)abs(dy1);
-        if (dy2)
-            dbx_step = dx2 / (float)abs(dy2);
-
-        if (dy1)
             du1_step = du1 / (float)abs(dy1);
-        if (dy1)
             dv1_step = dv1 / (float)abs(dy1);
-        if (dy1)
             dw1_step = dw1 / (float)abs(dy1);
+        }
 
         if (dy2)
+        {
+            dbx_step = dx2 / (float)abs(dy2);
             du2_step = du2 / (float)abs(dy2);
-        if (dy2)
             dv2_step = dv2 / (float)abs(dy2);
-        if (dy2)
             dw2_step = dw2 / (float)abs(dy2);
+        }
 
         if (dy1)
         {
@@ -786,9 +784,9 @@ namespace olc
                     std::swap(tex_sw, tex_ew);
                 }
 
-                tex_u = tex_su;
-                tex_v = tex_sv;
-                tex_w = tex_sw;
+                // tex_u = tex_su;
+                // tex_v = tex_sv;
+                // tex_w = tex_sw;
 
                 float tstep = 1.0f / ((float)(bx - ax));
                 float t = 0.0f;
@@ -817,21 +815,17 @@ namespace olc
         du1 = u3 - u2;
         dw1 = w3 - w2;
 
-        if (dy1)
-            dax_step = dx1 / (float)abs(dy1);
         if (dy2)
             dbx_step = dx2 / (float)abs(dy2);
 
-        du1_step = 0, dv1_step = 0;
-        if (dy1)
-            du1_step = du1 / (float)abs(dy1);
-        if (dy1)
-            dv1_step = dv1 / (float)abs(dy1);
-        if (dy1)
-            dw1_step = dw1 / (float)abs(dy1);
+        // du1_step = 0, dv1_step = 0;
 
         if (dy1)
         {
+            dax_step = dx1 / (float)abs(dy1);
+            du1_step = du1 / (float)abs(dy1);
+            dv1_step = dv1 / (float)abs(dy1);
+            dw1_step = dw1 / (float)abs(dy1);
             for (int i = y2; i <= y3; i++)
             {
                 int ax = int(x2 + (float)(i - y2) * dax_step);
@@ -853,9 +847,9 @@ namespace olc
                     std::swap(tex_sw, tex_ew);
                 }
 
-                tex_u = tex_su;
-                tex_v = tex_sv;
-                tex_w = tex_sw;
+                // tex_u = tex_su;
+                // tex_v = tex_sv;
+                // tex_w = tex_sw;
 
                 float tstep = 1.0f / ((float)(bx - ax));
                 float t = 0.0f;
@@ -1026,7 +1020,7 @@ namespace olc
         matView = GFX3D::Math::Mat_QuickInverse(matView);
     }
 
-    void GFX3D::PipeLine::SetTransform(olc::GFX3D::mat4x4 &transform)
+    void GFX3D::PipeLine::SetTransform(const olc::GFX3D::mat4x4 &transform)
     {
         matWorld = transform;
     }
@@ -1476,41 +1470,28 @@ namespace olc
               dca1_step = 0, dca2_step = 0;
 
         if (dy1)
+        {
             dax_step = dx1 / (float)abs(dy1);
-        if (dy2)
-            dbx_step = dx2 / (float)abs(dy2);
-
-        if (dy1)
             du1_step = du1 / (float)abs(dy1);
-        if (dy1)
             dv1_step = dv1 / (float)abs(dy1);
-        if (dy1)
             dw1_step = dw1 / (float)abs(dy1);
-
-        if (dy2)
-            du2_step = du2 / (float)abs(dy2);
-        if (dy2)
-            dv2_step = dv2 / (float)abs(dy2);
-        if (dy2)
-            dw2_step = dw2 / (float)abs(dy2);
-
-        if (dy1)
             dcr1_step = dcr1 / (float)abs(dy1);
-        if (dy1)
             dcg1_step = dcg1 / (float)abs(dy1);
-        if (dy1)
             dcb1_step = dcb1 / (float)abs(dy1);
-        if (dy1)
             dca1_step = dca1 / (float)abs(dy1);
+        }
 
         if (dy2)
+        {
+            dbx_step = dx2 / (float)abs(dy2);
+            du2_step = du2 / (float)abs(dy2);
+            dv2_step = dv2 / (float)abs(dy2);
+            dw2_step = dw2 / (float)abs(dy2);
             dcr2_step = dcr2 / (float)abs(dy2);
-        if (dy2)
             dcg2_step = dcg2 / (float)abs(dy2);
-        if (dy2)
             dcb2_step = dcb2 / (float)abs(dy2);
-        if (dy2)
             dca2_step = dca2 / (float)abs(dy2);
+        }
 
         float pixel_r = 0.0f;
         float pixel_g = 0.0f;
@@ -1554,13 +1535,13 @@ namespace olc
                     std::swap(col_sa, col_ea);
                 }
 
-                tex_u = tex_su;
-                tex_v = tex_sv;
-                tex_w = tex_sw;
-                col_r = col_sr;
-                col_g = col_sg;
-                col_b = col_sb;
-                col_a = col_sa;
+                // tex_u = tex_su;
+                // tex_v = tex_sv;
+                // tex_w = tex_sw;
+                // col_r = col_sr;
+                // col_g = col_sg;
+                // col_b = col_sb;
+                // col_a = col_sa;
 
                 float tstep = 1.0f / ((float)(bx - ax));
                 float t = 0.0f;
@@ -1618,35 +1599,27 @@ namespace olc
         dcb1 = c3.b - c2.b;
         dca1 = c3.a - c2.a;
 
-        if (dy1)
-            dax_step = dx1 / (float)abs(dy1);
         if (dy2)
             dbx_step = dx2 / (float)abs(dy2);
 
-        du1_step = 0;
-        dv1_step = 0;
-        if (dy1)
-            du1_step = du1 / (float)abs(dy1);
-        if (dy1)
-            dv1_step = dv1 / (float)abs(dy1);
-        if (dy1)
-            dw1_step = dw1 / (float)abs(dy1);
+        // du1_step = 0;
+        // dv1_step = 0;
 
-        dcr1_step = 0;
-        dcg1_step = 0;
-        dcb1_step = 0;
-        dca1_step = 0;
-        if (dy1)
-            dcr1_step = dcr1 / (float)abs(dy1);
-        if (dy1)
-            dcg1_step = dcg1 / (float)abs(dy1);
-        if (dy1)
-            dcb1_step = dcb1 / (float)abs(dy1);
-        if (dy1)
-            dca1_step = dca1 / (float)abs(dy1);
+        // dcr1_step = 0;
+        // dcg1_step = 0;
+        // dcb1_step = 0;
+        // dca1_step = 0;
 
         if (dy1)
         {
+            dax_step = dx1 / (float)abs(dy1);
+            du1_step = du1 / (float)abs(dy1);
+            dv1_step = dv1 / (float)abs(dy1);
+            dw1_step = dw1 / (float)abs(dy1);
+            dcr1_step = dcr1 / (float)abs(dy1);
+            dcg1_step = dcg1 / (float)abs(dy1);
+            dcb1_step = dcb1 / (float)abs(dy1);
+            dca1_step = dca1 / (float)abs(dy1);
             for (int i = y2; i <= y3; i++)
             {
                 int ax = int(x2 + (float)(i - y2) * dax_step);
@@ -1682,13 +1655,13 @@ namespace olc
                     std::swap(col_sa, col_ea);
                 }
 
-                tex_u = tex_su;
-                tex_v = tex_sv;
-                tex_w = tex_sw;
-                col_r = col_sr;
-                col_g = col_sg;
-                col_b = col_sb;
-                col_a = col_sa;
+                // tex_u = tex_su;
+                // tex_v = tex_sv;
+                // tex_w = tex_sw;
+                // col_r = col_sr;
+                // col_g = col_sg;
+                // col_b = col_sb;
+                // col_a = col_sa;
 
                 float tstep = 1.0f / ((float)(bx - ax));
                 float t = 0.0f;

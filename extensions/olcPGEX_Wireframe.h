@@ -97,46 +97,46 @@ namespace olc
         void translate(float x, float y)
         {
             identity();
-            auto &m = (*this);
-            m(2, 0) = x;
-            m(2, 1) = y;
+            auto &mat = (*this);
+            mat(2, 0) = x;
+            mat(2, 1) = y;
         }
         void translate(const olc::v2d_generic<T> &v) { translate(v.x, v.y); }
         void scale(float x, float y)
         {
             identity();
-            auto &m = (*this);
-            m(0, 0) = x;
-            m(1, 1) = y;
+            auto &mat = (*this);
+            mat(0, 0) = x;
+            mat(1, 1) = y;
         }
         void scale(const olc::v2d_generic<T> &v) { return scale(v.x, v.y); }
         void rotate(float a)
         {
             identity();
-            auto &m = (*this);
-            m(0, 0) = cos(a);
-            m(0, 1) = sin(a);
-            m(1, 0) = -m(0, 1);
-            m(1, 1) = m(0, 0);
+            auto &mat = (*this);
+            mat(0, 0) = cos(a);
+            mat(0, 1) = sin(a);
+            mat(1, 0) = -mat(0, 1);
+            mat(1, 1) = mat(0, 0);
         }
 
         olc::v2d_generic<T> operator*(const olc::v2d_generic<T> &v) const
         {
-            auto &m = *this;
+            auto &mat = *this;
             olc::v2d_generic<T> vOut;
-            vOut.x = m(0, 0) * v.x + m(1, 0) * v.y + m(2, 0) * T(1);
-            vOut.y = m(0, 1) * v.x + m(1, 1) * v.y + m(2, 1) * T(1);
-            T z = m(0, 2) * v.x + m(1, 2) * v.y + m(2, 2) * T(1);
+            vOut.x = mat(0, 0) * v.x + mat(1, 0) * v.y + mat(2, 0) * T(1);
+            vOut.y = mat(0, 1) * v.x + mat(1, 1) * v.y + mat(2, 1) * T(1);
+            T z = mat(0, 2) * v.x + mat(1, 2) * v.y + mat(2, 2) * T(1);
             return (vOut / z);
         }
 
         mat3_generic operator*(const mat3_generic &rhs) const
         {
-            auto &m = *this;
+            auto &mat = *this;
             mat3_generic<T> out;
             for (size_t c = 0; c < 3; c++)
                 for (size_t r = 0; r < 3; r++)
-                    out(r, c) = m(r, 0) * rhs(0, c) + m(r, 1) * rhs(1, c) + m(r, 2) * rhs(2, c);
+                    out(r, c) = mat(r, 0) * rhs(0, c) + mat(r, 1) * rhs(1, c) + mat(r, 2) * rhs(2, c);
             return out;
         }
     };
@@ -188,7 +188,7 @@ namespace olc
             for (int i = 0; i < nPoints; i++)
             {
                 float fTheta = (float(i) / float(nPoints)) * 2.0f * 3.14159f;
-                m.push_back(olc::vf2d{cos(fTheta), sin(fTheta)} * fRadius);
+                m.push_back(olc::vf2d{cosf(fTheta), sinf(fTheta)} * fRadius);
             }
             return m;
         }
@@ -204,7 +204,7 @@ namespace olc
             for (int i = 0; i < nTeeth * 4; i++)
             {
                 float fTheta = (float(i) / float(nTeeth * 4)) * 2.0f * 3.14159f;
-                m.push_back(olc::vf2d{cos(fTheta), sin(fTheta)} * 2.0f * (float((i / 2) % 2) ? fOuterRadius : fInnerRadius));
+                m.push_back(olc::vf2d{cosf(fTheta), sinf(fTheta)} * 2.0f * (float((i / 2) % 2) ? fOuterRadius : fInnerRadius));
             }
             return m;
         }

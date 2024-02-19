@@ -569,7 +569,7 @@ namespace olc
     // Pixel Game Engine Advanced Configuration
     constexpr uint8_t nMouseButtons = 5;
     constexpr uint8_t nDefaultAlpha = 0xFF;
-    constexpr uint32_t nDefaultPixel = (nDefaultAlpha << 24);
+    constexpr uint32_t nDefaultPixel = ((uint32_t)nDefaultAlpha << 24);
     constexpr uint8_t nTabSizeInSpaces = 4;
     constexpr size_t OLC_MAX_VERTS = 128;
     enum rcode
@@ -1001,7 +1001,7 @@ namespace olc
     {
     public:
         Decal(olc::Sprite *spr, bool filter = false, bool clamp = true);
-        Decal(const uint32_t nExistingTextureResource, olc::Sprite *spr);
+        Decal(const uint32_t nExistingTextureResource, const olc::Sprite *spr);
         virtual ~Decal();
         void Update();
         void UpdateSprite();
@@ -1257,12 +1257,12 @@ namespace olc
         void FillTexturedTriangle(std::vector<olc::vf2d> vPoints, std::vector<olc::vf2d> vTex, std::vector<olc::Pixel> vColour, olc::Sprite *sprTex);
         void FillTexturedPolygon(const std::vector<olc::vf2d> &vPoints, const std::vector<olc::vf2d> &vTex, const std::vector<olc::Pixel> &vColour, olc::Sprite *sprTex, olc::DecalStructure structure = olc::DecalStructure::LIST);
         // Draws an entire sprite at location (x,y)
-        void DrawSprite(int32_t x, int32_t y, Sprite *sprite, uint32_t scale = 1, uint8_t flip = olc::Sprite::NONE);
-        void DrawSprite(const olc::vi2d &pos, Sprite *sprite, uint32_t scale = 1, uint8_t flip = olc::Sprite::NONE);
+        void DrawSprite(int32_t x, int32_t y, const Sprite *sprite, uint32_t scale = 1, uint8_t flip = olc::Sprite::NONE);
+        void DrawSprite(const olc::vi2d &pos, const Sprite *sprite, uint32_t scale = 1, uint8_t flip = olc::Sprite::NONE);
         // Draws an area of a sprite at location (x,y), where the
         // selected area is (ox,oy) to (ox+w,oy+h)
-        void DrawPartialSprite(int32_t x, int32_t y, Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1, uint8_t flip = olc::Sprite::NONE);
-        void DrawPartialSprite(const olc::vi2d &pos, Sprite *sprite, const olc::vi2d &sourcepos, const olc::vi2d &size, uint32_t scale = 1, uint8_t flip = olc::Sprite::NONE);
+        void DrawPartialSprite(int32_t x, int32_t y, const Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale = 1, uint8_t flip = olc::Sprite::NONE);
+        void DrawPartialSprite(const olc::vi2d &pos, const Sprite *sprite, const olc::vi2d &sourcepos, const olc::vi2d &size, uint32_t scale = 1, uint8_t flip = olc::Sprite::NONE);
         // Draws a single line of text - traditional monospaced
         void DrawString(int32_t x, int32_t y, const std::string &sText, Pixel col = olc::WHITE, uint32_t scale = 1);
         void DrawString(const olc::vi2d &pos, const std::string &sText, Pixel col = olc::WHITE, uint32_t scale = 1);
@@ -1963,7 +1963,7 @@ namespace olc
         Update();
     }
 
-    Decal::Decal(const uint32_t nExistingTextureResource, olc::Sprite *spr)
+    Decal::Decal(const uint32_t nExistingTextureResource, const olc::Sprite *spr)
     {
         if (spr == nullptr)
             return;
@@ -2219,8 +2219,8 @@ namespace olc
     // | olc::PixelGameEngine IMPLEMENTATION                                          |
     // O------------------------------------------------------------------------------O
     PixelGameEngine::PixelGameEngine()
+        : sAppName("Undefined")
     {
-        sAppName = "Undefined";
         olc::PGEX::pge = this;
 
         // Bring in relevant Platform & Rendering systems depending
@@ -2230,6 +2230,9 @@ namespace olc
 
     PixelGameEngine::~PixelGameEngine()
     {
+        olc::PGEX::pge = nullptr;
+        olc::Platform::ptrPGE = nullptr;
+        olc::Renderer::ptrPGE = nullptr;
     }
 
     olc::rcode PixelGameEngine::Construct(int32_t screen_w, int32_t screen_h, int32_t pixel_w, int32_t pixel_h, bool full_screen, bool vsync, bool cohesion)
@@ -2517,7 +2520,7 @@ namespace olc
 
     void PixelGameEngine::DrawLine(int32_t x1, int32_t y1, int32_t x2, int32_t y2, Pixel p, uint32_t pattern)
     {
-        int x, y, dx, dy, dx1, dy1, px, py, xe, ye, i;
+        int x, y, dx, dy, dx1, dy1, px, py;
         dx = x2 - x1;
         dy = y2 - y1;
 
@@ -2560,6 +2563,7 @@ namespace olc
         py = 2 * dx1 - dy1;
         if (dy1 <= dx1)
         {
+            int xe;
             if (dx >= 0)
             {
                 x = x1;
@@ -2576,9 +2580,8 @@ namespace olc
             if (rol())
                 Draw(x, y, p);
 
-            for (i = 0; x < xe; i++)
+            for (; x < xe; ++x)
             {
-                x = x + 1;
                 if (px < 0)
                     px = px + 2 * dy1;
                 else
@@ -2595,6 +2598,7 @@ namespace olc
         }
         else
         {
+            int ye;
             if (dy >= 0)
             {
                 x = x1;
@@ -2611,9 +2615,8 @@ namespace olc
             if (rol())
                 Draw(x, y, p);
 
-            for (i = 0; y < ye; i++)
+            for (; y < ye; ++y)
             {
-                y = y + 1;
                 if (py <= 0)
                     py = py + 2 * dx1;
                 else
@@ -3070,8 +3073,7 @@ namespace olc
                     break;
                 else
                     t1x += signx1;
-                if (i < dx1)
-                    i++;
+                i++;
             }
         next3:
             // process second line until y value is about to change
@@ -3310,12 +3312,12 @@ namespace olc
         }
     }
 
-    void PixelGameEngine::DrawSprite(const olc::vi2d &pos, Sprite *sprite, uint32_t scale, uint8_t flip)
+    void PixelGameEngine::DrawSprite(const olc::vi2d &pos, const Sprite *sprite, uint32_t scale, uint8_t flip)
     {
         DrawSprite(pos.x, pos.y, sprite, scale, flip);
     }
 
-    void PixelGameEngine::DrawSprite(int32_t x, int32_t y, Sprite *sprite, uint32_t scale, uint8_t flip)
+    void PixelGameEngine::DrawSprite(int32_t x, int32_t y, const Sprite *sprite, uint32_t scale, uint8_t flip)
     {
         if (sprite == nullptr)
             return;
@@ -3357,12 +3359,12 @@ namespace olc
         }
     }
 
-    void PixelGameEngine::DrawPartialSprite(const olc::vi2d &pos, Sprite *sprite, const olc::vi2d &sourcepos, const olc::vi2d &size, uint32_t scale, uint8_t flip)
+    void PixelGameEngine::DrawPartialSprite(const olc::vi2d &pos, const Sprite *sprite, const olc::vi2d &sourcepos, const olc::vi2d &size, uint32_t scale, uint8_t flip)
     {
         DrawPartialSprite(pos.x, pos.y, sprite, sourcepos.x, sourcepos.y, size.x, size.y, scale, flip);
     }
 
-    void PixelGameEngine::DrawPartialSprite(int32_t x, int32_t y, Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, uint8_t flip)
+    void PixelGameEngine::DrawPartialSprite(int32_t x, int32_t y, const Sprite *sprite, int32_t ox, int32_t oy, int32_t w, int32_t h, uint32_t scale, uint8_t flip)
     {
         if (sprite == nullptr)
             return;
@@ -4264,7 +4266,7 @@ namespace olc
             if (!sCommandHistory.empty())
             {
                 if (sCommandHistoryIt != sCommandHistory.begin())
-                    sCommandHistoryIt--;
+                    --sCommandHistoryIt;
 
                 nTextEntryCursor = int32_t(sCommandHistoryIt->size());
                 sTextEntryString = *sCommandHistoryIt;
@@ -4277,7 +4279,7 @@ namespace olc
             {
                 if (sCommandHistoryIt != sCommandHistory.end())
                 {
-                    sCommandHistoryIt++;
+                    ++sCommandHistoryIt;
                     if (sCommandHistoryIt != sCommandHistory.end())
                     {
                         nTextEntryCursor = int32_t(sCommandHistoryIt->size());
@@ -4527,7 +4529,7 @@ namespace olc
         platform->HandleSystemEvent();
 
         // Compare hardware input states from previous frame
-        auto ScanHardware = [&](HWButton *pKeys, bool *pStateOld, bool *pStateNew, uint32_t nKeyCount)
+        auto ScanHardware = [&](HWButton *pKeys, bool *pStateOld, const bool *pStateNew, uint32_t nKeyCount)
         {
             for (uint32_t i = 0; i < nKeyCount; i++)
             {
@@ -4611,7 +4613,7 @@ namespace olc
                     renderer->DrawLayerQuad(layer->vOffset, layer->vScale, layer->tint);
 
                     // Display Decals in order for this layer
-                    for (auto &decal : layer->vecDecalInstance)
+                    for (const auto &decal : layer->vecDecalInstance)
                         renderer->DrawDecal(decal);
                     layer->vecDecalInstance.clear();
                 }
@@ -4672,7 +4674,7 @@ namespace olc
 
             for (int i = 0; i < 24; i++)
             {
-                int k = r & (1 << i) ? 255 : 0;
+                int k = (r & (1 << i)) ? 255 : 0;
                 fontRenderable.Sprite()->SetPixel(px, py, olc::Pixel(k, k, k, k));
                 if (++py == 48)
                 {
@@ -4871,36 +4873,36 @@ namespace olc
     class Renderer_Headless : public olc::Renderer
     {
     public:
-        virtual void PrepareDevice(){};
-        virtual olc::rcode CreateDevice(std::vector<void *> params, bool bFullScreen, bool bVSYNC) { return olc::rcode::OK; }
-        virtual olc::rcode DestroyDevice() { return olc::rcode::OK; }
-        virtual void DisplayFrame() {}
-        virtual void PrepareDrawing() {}
-        virtual void SetDecalMode(const olc::DecalMode &mode) {}
-        virtual void DrawLayerQuad(const olc::vf2d &offset, const olc::vf2d &scale, const olc::Pixel tint) {}
-        virtual void DrawDecal(const olc::DecalInstance &decal) {}
-        virtual uint32_t CreateTexture(const uint32_t width, const uint32_t height, const bool filtered = false, const bool clamp = true) { return 1; };
-        virtual void UpdateTexture(uint32_t id, olc::Sprite *spr) {}
-        virtual void ReadTexture(uint32_t id, olc::Sprite *spr) {}
-        virtual uint32_t DeleteTexture(const uint32_t id) { return 1; }
-        virtual void ApplyTexture(uint32_t id) {}
-        virtual void UpdateViewport(const olc::vi2d &pos, const olc::vi2d &size) {}
-        virtual void ClearBuffer(olc::Pixel p, bool bDepth) {}
+        virtual void PrepareDevice() override {};
+        virtual olc::rcode CreateDevice(std::vector<void *> params, bool bFullScreen, bool bVSYNC) override { return olc::rcode::OK; }
+        virtual olc::rcode DestroyDevice() override { return olc::rcode::OK; }
+        virtual void DisplayFrame() override {}
+        virtual void PrepareDrawing() override {}
+        virtual void SetDecalMode(const olc::DecalMode &mode) override {}
+        virtual void DrawLayerQuad(const olc::vf2d &offset, const olc::vf2d &scale, const olc::Pixel tint) override {}
+        virtual void DrawDecal(const olc::DecalInstance &decal) override {}
+        virtual uint32_t CreateTexture(const uint32_t width, const uint32_t height, const bool filtered = false, const bool clamp = true) override { return 1; };
+        virtual void UpdateTexture(uint32_t id, olc::Sprite *spr) override {}
+        virtual void ReadTexture(uint32_t id, olc::Sprite *spr) override {}
+        virtual uint32_t DeleteTexture(const uint32_t id) override { return 1; }
+        virtual void ApplyTexture(uint32_t id) override {}
+        virtual void UpdateViewport(const olc::vi2d &pos, const olc::vi2d &size) override {}
+        virtual void ClearBuffer(olc::Pixel p, bool bDepth) override {}
     };
 #endif
 #if defined(OLC_PLATFORM_HEADLESS)
     class Platform_Headless : public olc::Platform
     {
     public:
-        virtual olc::rcode ApplicationStartUp() { return olc::rcode::OK; }
-        virtual olc::rcode ApplicationCleanUp() { return olc::rcode::OK; }
-        virtual olc::rcode ThreadStartUp() { return olc::rcode::OK; }
-        virtual olc::rcode ThreadCleanUp() { return olc::rcode::OK; }
-        virtual olc::rcode CreateGraphics(bool bFullScreen, bool bEnableVSYNC, const olc::vi2d &vViewPos, const olc::vi2d &vViewSize) { return olc::rcode::OK; }
-        virtual olc::rcode CreateWindowPane(const olc::vi2d &vWindowPos, olc::vi2d &vWindowSize, bool bFullScreen) { return olc::rcode::OK; }
-        virtual olc::rcode SetWindowTitle(const std::string &s) { return olc::rcode::OK; }
-        virtual olc::rcode StartSystemEventLoop() { return olc::rcode::OK; }
-        virtual olc::rcode HandleSystemEvent() { return olc::rcode::OK; }
+        virtual olc::rcode ApplicationStartUp() override { return olc::rcode::OK; }
+        virtual olc::rcode ApplicationCleanUp() override { return olc::rcode::OK; }
+        virtual olc::rcode ThreadStartUp() override { return olc::rcode::OK; }
+        virtual olc::rcode ThreadCleanUp() override { return olc::rcode::OK; }
+        virtual olc::rcode CreateGraphics(bool bFullScreen, bool bEnableVSYNC, const olc::vi2d &vViewPos, const olc::vi2d &vViewSize) override { return olc::rcode::OK; }
+        virtual olc::rcode CreateWindowPane(const olc::vi2d &vWindowPos, olc::vi2d &vWindowSize, bool bFullScreen) override { return olc::rcode::OK; }
+        virtual olc::rcode SetWindowTitle(const std::string &s) override { return olc::rcode::OK; }
+        virtual olc::rcode StartSystemEventLoop() override { return olc::rcode::OK; }
+        virtual olc::rcode HandleSystemEvent() override { return olc::rcode::OK; }
     };
 #endif
 }
@@ -5177,7 +5179,7 @@ namespace olc
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         }
 
-        void SetDecalMode(const olc::DecalMode &mode)
+        void SetDecalMode(const olc::DecalMode &mode) override
         {
             if (mode != nDecalMode)
             {

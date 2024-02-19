@@ -77,6 +77,7 @@
 #include <algorithm>
 #undef min
 #undef max
+#include "olcPixelGameEngine.h"
 
 // Choose a default sound backend
 #if !defined(USE_ALSA) && !defined(USE_OPENAL) && !defined(USE_WINDOWS)

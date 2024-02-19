@@ -73,6 +73,7 @@
 #include <algorithm>
 #undef min
 #undef max
+#include "olcPixelGameEngine.h"
 
 namespace olc
 {
@@ -131,7 +132,7 @@ namespace olc
             return;
 
         // Work out bounding rectangle of sprite
-        float ex, ey;
+        float ex, ey = {};
         float sx, sy;
         float px, py;
 
