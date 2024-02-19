@@ -164,6 +164,8 @@ namespace olc
         static void StopSample(int id);
         static void StopAll();
         static float GetMixerOutput(int nChannel, float fGlobalTime, float fTimeStep);
+        
+		static float GetTime();
 
     private:
 #ifdef USE_WINDOWS // Windows specific sound management
@@ -425,6 +427,11 @@ namespace olc
         else
             return fMixerSample;
     }
+
+	float SOUND::GetTime()
+	{
+		return m_fGlobalTime;
+	}
 
     std::thread SOUND::m_AudioThread;
     std::atomic<bool> SOUND::m_bAudioThreadActive{false};
