@@ -562,6 +562,7 @@ namespace X11
 #pragma region pge_declaration
 namespace olc
 {
+    const double PI = 2.0 * acos(0.0);
     class PixelGameEngine;
     class Sprite;
 
